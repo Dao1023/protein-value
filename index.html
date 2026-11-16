@@ -38,6 +38,7 @@
   .stat .l{font-size:13px;color:var(--muted);margin-top:9px;line-height:1.45}
 
   section{padding:46px 0 10px}
+  section,h2,[id]{scroll-margin-top:72px}
   .sec-label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700;
     border-top:2px solid var(--ink);padding-top:10px;margin-bottom:8px}
   h2{font-family:Georgia,"Songti SC",serif;font-weight:400;font-size:clamp(24px,3.2vw,32px);line-height:1.25;margin:0 0 14px}
@@ -74,20 +75,21 @@
   .cat-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px}
   .scroll{overflow-x:auto}
 
-  .filterbar{position:sticky;top:0;z-index:60;background:var(--paper);
-    margin:0 -24px;padding:0 24px;border-bottom:1px solid var(--rule);
-    box-shadow:0 8px 12px -10px rgba(0,0,0,.35)}
+  .filterbar{position:fixed;top:0;left:0;right:0;z-index:60;background:var(--paper);
+    padding:0;border-bottom:0}
+  .filterbar.stuck{border-bottom:1px solid var(--rule);box-shadow:0 8px 12px -10px rgba(0,0,0,.35)}
   .filters{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:10px 0 12px}
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{font:inherit;font-size:13px;line-height:1;padding:7px 11px;border:1px solid var(--rule);background:#fff;color:#3a362e;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:6px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;min-width:0;flex:1 1 auto}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{font:inherit;font-size:13px;line-height:1;padding:7px 11px;border:1px solid var(--rule);background:#fff;color:#3a362e;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;flex:0 0 auto}
   .chip:hover{border-color:var(--ink)}
   .chip i{width:8px;height:8px;border-radius:50%;display:inline-block}
   .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
   .chip .c{opacity:.55;font-size:11px;font-variant-numeric:tabular-nums}
-  .seg{display:inline-flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden;background:#fff}
+  .seg{display:inline-flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden;background:#fff;flex:0 0 auto}
   .seg button{font:inherit;font-size:13px;padding:7px 13px;border:0;background:transparent;color:#3a362e;cursor:pointer}
   .seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
-  .count{font-size:13px;color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums}
+  .count{font-size:13px;color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums;flex:0 0 auto;white-space:nowrap}
   .more{font:inherit;font-size:13px;margin-top:10px;padding:8px 14px;border:1px dashed var(--rule);background:transparent;color:var(--blue);cursor:pointer;width:100%;border-radius:4px}
   .more:hover{border-color:var(--blue)}
   .tag-k{font-size:10.5px;letter-spacing:.04em;color:var(--muted);border:1px solid var(--rule);border-radius:3px;padding:0 4px;margin-left:6px;vertical-align:1px}
@@ -96,12 +98,12 @@
   footer p{max-width:none}
   @media (max-width:640px){
     body{font-size:16px}
+    .filters{flex-wrap:nowrap}
+    .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
     .stat{border-right:none;border-bottom:1px solid var(--rule)}
-    .filterbar{margin:0 -16px;padding:0 16px}
-    .filters{padding:8px 0 10px;gap:6px 10px}
-    .chips{flex-wrap:nowrap;overflow-x:auto;max-width:100%;padding-bottom:2px;scrollbar-width:none}
-    .chips::-webkit-scrollbar{display:none}
-    .seg button{padding:5px 10px;font-size:12.5px}
+    .filters{padding:8px 0 9px;gap:6px 8px}
+    .seg button{padding:5px 10px;font-size:12px}
+    .count{font-size:12px}
   }
 </style>
 </head>
@@ -136,6 +138,7 @@
 
   <!-- 吸顶筛选条：独立于章节，全页滚动都保持在视口顶端 -->
   <div class="filterbar">
+    <div class="wrap">
     <div class="filters">
       <div class="chips" id="chips"></div>
       <div class="seg" id="density" role="group" aria-label="显示密度">
@@ -144,6 +147,7 @@
         <button data-d="all" aria-pressed="false">详细</button>
       </div>
       <div class="count" id="count"></div>
+    </div>
     </div>
   </div>
 
@@ -628,6 +632,33 @@ function render(){
 
 render();
 
+</script>
+<script>
+/* 筛选条：贴顶但首屏不留第二条分隔线；高度实测同步到 body，避免换行时压住正文 */
+(function(){
+  var bar=document.querySelector('.filterbar');
+  var body=document.body;
+  var lastH=-1;
+  function syncHeight(){
+    var h=Math.ceil(bar.getBoundingClientRect().height);
+    if(h!==lastH){lastH=h;body.style.paddingTop=h+'px';}
+  }
+  function setStuck(){
+    var s=window.scrollY>8;
+    if(s===bar.classList.contains('stuck'))return;
+    bar.classList.toggle('stuck',s);
+    syncHeight();/* 边框开关会让条高 ±1px，立刻同步 */
+  }
+  function tick(){setStuck();syncHeight();}
+  syncHeight();
+  setStuck();
+  if(window.ResizeObserver){new ResizeObserver(tick).observe(bar);}
+  window.addEventListener('resize',tick);
+  window.addEventListener('load',tick);
+  window.addEventListener('scroll',tick,{passive:true});
+  /* 兜底：后台/隐藏标签页会暂停 scroll 与 rAF，定时器仍能校正状态 */
+  setInterval(tick,500);
+})();
 </script>
 </body>
 </html>
