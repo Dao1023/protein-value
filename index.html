@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>买蛋白质：哪种食物最划算</title>
+<meta name="description" content="21 种常见食物的蛋白质性价比：每克蛋白质要花多少钱。">
+<style>
+  :root{
+    --paper:#fbf9f4; --ink:#1a1a1a; --muted:#6b665c; --rule:#d8d2c4;
+    --blue:#0f5499; --claret:#990f3d; --orange:#d97b1f; --green:#2e7d5b;
+    --cat-zhushi:#0f5499; --cat-zashi:#2e7d5b; --cat-dannai:#d97b1f; --cat-roulei:#990f3d;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+
+  header.masthead{border-bottom:1px solid var(--ink);padding:18px 0 10px}
+  .masthead .inner{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+  .brand{font-family:Georgia,"Songti SC",serif;font-size:19px;letter-spacing:.02em}
+  .masthead .meta{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+  .hero{padding:54px 0 28px;border-bottom:1px solid var(--rule)}
+  .kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--claret);font-weight:700;margin-bottom:14px}
+  h1{font-family:Georgia,"Songti SC",serif;font-weight:400;font-size:clamp(32px,5.2vw,52px);line-height:1.14;margin:0 0 18px;letter-spacing:-.01em}
+  h1 em{font-style:normal;color:var(--claret)}
+  .standfirst{font-size:19px;line-height:1.6;color:#33302a;max-width:44em;margin:0 0 8px}
+  .byline{margin-top:22px;font-size:13px;color:var(--muted)}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));border-bottom:1px solid var(--rule)}
+  .stat{padding:26px 22px 24px;border-right:1px solid var(--rule)}
+  .stat:last-child{border-right:none}
+  .stat .n{font-family:Georgia,serif;font-size:38px;line-height:1;letter-spacing:-.02em}
+  .stat .n small{font-size:16px;color:var(--muted);letter-spacing:0}
+  .stat .l{font-size:13px;color:var(--muted);margin-top:9px;line-height:1.45}
+
+  section{padding:46px 0 10px}
+  .sec-label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700;
+    border-top:2px solid var(--ink);padding-top:10px;margin-bottom:8px}
+  h2{font-family:Georgia,"Songti SC",serif;font-weight:400;font-size:clamp(24px,3.2vw,32px);line-height:1.25;margin:0 0 14px}
+  p{margin:0 0 16px;max-width:44em}
+  .lede{font-size:18px;color:#33302a}
+  a{color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(15,84,153,.35)}
+  a:hover{border-bottom-color:var(--blue)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.9em;background:#efeade;padding:1px 5px;border-radius:3px}
+
+  .chart-card{border:1px solid var(--rule);background:#fff;padding:22px 22px 12px;margin:22px 0 10px}
+  .chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:6px}
+  .chart-title{font-family:Georgia,"Songti SC",serif;font-size:18px;margin:0}
+  .chart-sub{font-size:13px;color:var(--muted);margin:4px 0 0}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:10px 0 4px}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .bar-label{font-size:13px;fill:var(--ink)}
+  .val-label{font-size:13px;fill:var(--muted);font-variant-numeric:tabular-nums}
+  .grid-line{stroke:var(--rule);stroke-width:1}
+  .axis text{font-size:11.5px;fill:var(--muted)}
+  .footnote{font-size:12.5px;color:var(--muted);line-height:1.5;margin:12px 0 0;padding-top:10px;border-top:1px solid var(--rule)}
+
+  .pull{border-left:3px solid var(--claret);padding:6px 0 6px 20px;margin:30px 0;
+    font-family:Georgia,"Songti SC",serif;font-size:21px;line-height:1.45;color:#211f1b}
+  .pull span{color:var(--muted);font-size:15px;display:block;margin-top:8px;font-family:inherit}
+
+  table{width:100%;border-collapse:collapse;font-size:14.5px;margin:16px 0 6px;background:#fff}
+  caption{caption-side:top;text-align:left;font-size:12.5px;color:var(--muted);padding-bottom:8px}
+  th{text-align:left;font-weight:700;font-size:12px;letter-spacing:.06em;color:var(--muted);
+    border-bottom:1px solid var(--ink);padding:8px 8px 6px;vertical-align:bottom;white-space:nowrap}
+  td{padding:9px 8px;border-bottom:1px solid #eae5d8;vertical-align:top}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  td:nth-child(2),td:first-child{white-space:nowrap}
+  .cat-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px}
+  .scroll{overflow-x:auto}
+
+  footer{margin-top:56px;border-top:2px solid var(--ink);padding:22px 0 60px;font-size:13px;color:var(--muted)}
+  footer p{max-width:none}
+  @media (max-width:640px){
+    body{font-size:16px}
+    .stat{border-right:none;border-bottom:1px solid var(--rule)}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap inner">
+    <div class="brand">蛋白<span style="color:var(--claret)">性价比</span></div>
+    <div class="meta">2026 年 11 月</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="kicker">21 种常见食物的蛋白质账本</div>
+    <h1>买蛋白质，<br>最划算的不是鸡胸肉，是<em>黄豆</em></h1>
+    <p class="standfirst">
+      一斤黄豆 5 元，含 175 克蛋白质，折下来每克 0.029 元。同样一斤三文鱼 140 元、含 102 克蛋白质，
+      每克 1.37 元——为了同样的蛋白质，要多付 47 倍的钱。蛋白质含量和价格并不是一回事，
+      下面把它们放在同一把尺子上量：算的都是真正吃到嘴里的那部分，带壳、带骨、带荚的先折可食部。
+    </p>
+    <div class="byline">蛋白质含量：中国食物成分表（第 6 版）/ USDA ｜ 价格：北京新发地 2026-11-16 行情与商超零售价</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">0.029<small> 元</small></div><div class="l">黄豆每克蛋白质，全表最低</div></div>
+    <div class="stat"><div class="n">1.373<small> 元</small></div><div class="l">三文鱼（冰鲜）每克蛋白质，全表最高</div></div>
+    <div class="stat"><div class="n">47<small>×</small></div><div class="l">两者差了 47 倍</div></div>
+    <div class="stat"><div class="n">35<small> g</small></div><div class="l">黄豆每 100 克含蛋白质，也是全表最高</div></div>
+  </div>
+
+  <!-- ========== 1. 排名 ========== -->
+  <section>
+    <div class="sec-label">01 · 排名</div>
+    <h2>每克蛋白质要花多少钱</h2>
+    <p class="lede">把「每斤多少钱」除以「每斤含多少克蛋白质」，就是每克蛋白质的真实成本。数字越小越划算，它天然抹平了「一斤多少钱」的直觉误导。</p>
+
+    <div class="chart-card">
+      <div class="chart-head">
+        <div>
+          <p class="chart-title">每克蛋白质价格（元）</p>
+          <p class="chart-sub">横轴越短越划算 · 21 种食物</p>
+        </div>
+      </div>
+      <div class="legend" id="legend"></div>
+      <div id="chart-ranking" style="margin-top:6px"></div>
+      <p class="footnote">豆制品包揽前五（黄豆、花生、老豆腐、豆腐干、腐竹），干挂面、生大米、燕麦片紧随其后。鸡蛋 0.103 元，和干挂面 0.089 元相差不到 15%——因为鸡蛋 74% 是水，而挂面只有 12%。</p>
+    </div>
+  </section>
+
+  <!-- ========== 2. 含量 vs 价格 ========== -->
+  <section>
+    <div class="sec-label">02 · 两个维度</div>
+    <h2>蛋白质含量和价格，不是同一件事</h2>
+    <p>横轴是每 100 克含多少蛋白质，纵轴是每斤多少钱（对数刻度）。越靠左下越划算：既便宜，蛋白又多。</p>
+
+    <div class="chart-card">
+      <div class="chart-head">
+        <div>
+          <p class="chart-title">含量 × 价格</p>
+          <p class="chart-sub">每个点是一种食物 · 纵轴为对数刻度</p>
+        </div>
+      </div>
+      <div id="chart-scatter"></div>
+      <p class="footnote">左下角挤着黄豆、花生、豆腐干、燕麦片——廉价高蛋白的主力。右下的希腊酸奶和左上角的三文鱼是两个反面教材：一个蛋白少还贵，一个蛋白不低但贵在三倍。</p>
+    </div>
+  </section>
+
+  <!-- ========== 3. 鸡蛋 vs 挂面 ========== -->
+  <section>
+    <div class="sec-label">03 · 一个换算</div>
+    <h2>为什么鸡蛋和挂面，蛋白质差不多</h2>
+    <p>13.3 对 10.1，看着确实奇怪。但这是对的，关键在<b>水</b>：鸡蛋 74% 是水，挂面（干）只有约 12%。按「拿在手里的一百克」算，两者接近；换成每百克干物质、或者每百千卡算，差距立刻显出来。</p>
+
+    <div class="scroll">
+      <table>
+        <caption>同一种食物，四种口径</caption>
+        <thead><tr><th>口径</th><th class="num">鸡蛋</th><th class="num">挂面（干）</th><th>倍数</th></tr></thead>
+        <tbody>
+          <tr><td>每 100 克食物</td><td class="num">13.3 g</td><td class="num">10.1 g</td><td>1.3×</td></tr>
+          <tr><td>每 100 克干物质</td><td class="num">约 51 g</td><td class="num">约 11.5 g</td><td>4.4×</td></tr>
+          <tr><td>每 100 千卡</td><td class="num">约 9.2 g</td><td class="num">约 2.9 g</td><td>3.2×</td></tr>
+          <tr><td>每 100 克（挂面煮熟后）</td><td class="num">13.3 g</td><td class="num">3.6–4.2 g</td><td>约 3.5×</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="footnote" style="max-width:52em">挂面吸水 2.4 倍后，每 100 克熟面只剩 3.6–4.2 克蛋白质。所以「挂面和鸡蛋差不多」只在「干面条 vs 生鸡蛋」时成立；一旦端上桌，鸡蛋的蛋白密度是熟面条的三倍半。</p>
+
+    <div class="pull">
+      「含量」永远要问一句：一百克里有什么？
+      <span>生重还是熟重、干重还是湿重、可食部还是带骨带荚。这张表里每个数字都标了它的口径——因为它们不加标注就没法比。</span>
+    </div>
+  </section>
+
+  <!-- ========== 4. 全表 ========== -->
+  <section>
+    <div class="sec-label">04 · 全表</div>
+    <h2>21 种食物，从最划算到最贵</h2>
+    <div class="scroll">
+      <table id="tbl">
+        <caption>价格为中国大陆商超/菜场常见零售价（元/斤，2026-11）；蛋白质为每 100 克可食部</caption>
+        <thead>
+          <tr><th>食物</th><th>类别</th><th class="num">蛋白 g/100g</th><th class="num">食部</th><th class="num">元/斤</th><th class="num">元/克蛋白</th><th>口径与规格</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ========== 5. 方法 ========== -->
+  <section>
+    <div class="sec-label">05 · 方法</div>
+    <h2>数字从哪来，哪里还不确定</h2>
+    <p><b>计算</b>：<code>元/克蛋白质 = 每斤价格 ÷（蛋白含量 × 5）</code>。一斤 500 克，所以每斤含蛋白 C×5 克。</p>
+    <p><b>可食部</b>：带壳、带骨、带荚的食物按可食部折算——鸡蛋 88%、虾 67%、草鱼与鲈鱼 58%、毛豆 53%，其余按 100%。你付的是整只虾的钱，吃到的只有 67% 的肉；不折可食部，虾会被低估 1.5 倍，排到牛奶前面去。</p>
+    <p><b>含量</b>：以中国疾控中心营养与健康所「食物营养成分查询平台」为准，即《中国食物成分表》在线版（<a href="https://nlc.chinanutri.cn/fq/">nlc.chinanutri.cn</a>）；三文鱼等表中未收录的用 USDA FoodData Central 补。取可食部生重，谷物与豆制品取干重、米饭馒头取熟重，逐行标注。</p>
+    <p><b>价格</b>：以北京新发地农产品批发市场 2026-11-16 每日行情为锚点（<code>http://www.xinfadi.com.cn/getPriceData.html?prodName=三文鱼</code>），再按品类加价 1.3–1.8 倍推零售区间。牛奶、酸奶、挂面、馒头、黄豆无当日批发记录，用商超与电商折算，证据等级较低。</p>
+    <p><b>已知局限</b>：① 价格随城市、季节、规格波动极大（三文鱼冰鲜/冷冻差 2 倍，虾按头数差 1.5 倍），本页取一线城市商超常见价并标注规格；② 只算粗蛋白，没算氨基酸评分与消化率——按 DIAAS 修正（鸡蛋约 1.1、小麦约 0.5），鸡蛋其实比干挂面便宜一半，黄豆也占不到便宜；③ 没考虑烹饪损耗与时间成本。</p>
+    <p><b>关于主食</b>：谷物与豆制品统一按干重配干价。米饭那一行因此换成生大米——熟饭 2.6g/100g 对应生米 7.4g/100g、3.5 元/斤，两种读法相差近三倍，必须二选一。</p>
+    <p><b>一句话</b>：以「每克蛋白质最便宜」为目标，主力应该是<b>豆制品、鸡蛋、鸡胸肉</b>；牛奶和三文鱼不是用来买蛋白质的，它们卖的是钙、口感和那点 omega-3。</p>
+  </section>
+
+  <footer>
+    <p>本页所有数字可从仓库内 <code>data.csv</code> 复算。</p>
+    <p>含量：中国食物成分表（第 6 版）/ USDA FDC ｜ 价格：北京新发地 2026-11-16 ｜ 制图：有序棒棒糖图 + 对数散点</p>
+  </footer>
+</div>
+
+<script>
+const CATS = {"主食":"var(--cat-zhushi)","杂食":"var(--cat-zashi)","蛋奶":"var(--cat-dannai)","肉类":"var(--cat-roulei)"};
+
+/* name, cat, protein g/100g, 元/斤, 口径说明 */
+const DATA = [
+  {name:"黄豆（干）",     cat:"杂食", p:35.0, y:5.0,   e:1.00, note:"干重，植物蛋白之首"},
+  {name:"花生仁",         cat:"杂食", p:24.8, y:8.0,   e:1.00, note:"生花生仁"},
+  {name:"老豆腐",         cat:"杂食", p:12.2, y:4.0,   e:1.00, note:"北豆腐，含水较低"},
+  {name:"豆腐干",         cat:"杂食", p:16.2, y:6.5,   e:1.00, note:"白干/香干 12–20 取中"},
+  {name:"腐竹（干）",     cat:"杂食", p:44.6, y:18.0,  e:1.00, note:"干重；泡发后约 20g/100g"},
+  {name:"干挂面",         cat:"主食", p:10.1, y:4.5,   e:1.00, note:"干重；煮熟后 3.6–4.2"},
+  {name:"大米（生）",     cat:"主食", p:7.4,  y:3.5,   e:1.00, note:"干重。熟饭按 1:2.4 吸水折算"},
+  {name:"燕麦片（干）",   cat:"杂食", p:15.0, y:7.5,   e:1.00, note:"纯燕麦片，干重"},
+  {name:"馒头",           cat:"主食", p:7.8, y:4.0,    e:1.00, note:"标准粉，熟重"},
+  {name:"鸡蛋",           cat:"蛋奶", p:13.3, y:6.0,   e:0.88, note:"全蛋；含壳，取食部 88%"},
+  {name:"鸡胸肉",         cat:"肉类", p:19.4, y:12.5,  e:1.00, note:"去皮生重"},
+  {name:"嫩豆腐",         cat:"主食", p:6.2, y:4.0,    e:1.00, note:"南豆腐，含水较高"},
+  {name:"毛豆",           cat:"杂食", p:13.1, y:5.5,   e:0.53, note:"带荚买，食部仅 53%"},
+  {name:"猪里脊",         cat:"肉类", p:20.2, y:17.5,  e:1.00, note:"生重"},
+  {name:"草鱼",           cat:"肉类", p:16.6, y:12.0,  e:0.58, note:"整条买，去鳞去骨 58%"},
+  {name:"鲈鱼",           cat:"肉类", p:18.6, y:22.0,  e:0.58, note:"整条买，去鳞去骨 58%"},
+  {name:"纯牛奶",         cat:"蛋奶", p:3.0,  y:7.0,   e:1.00, note:"全脂，约 14 元/L"},
+  {name:"牛里脊",         cat:"肉类", p:22.2, y:52.0,  e:1.00, note:"牛柳，生重"},
+  {name:"虾（冻白虾）",   cat:"肉类", p:18.3, y:32.0,  e:0.67, note:"带壳买，去壳 67%；20–25 头/斤"},
+  {name:"三文鱼（冰鲜）", cat:"肉类", p:20.4, y:140.0, e:1.00, note:"鱼柳，无骨无皮"},
+  {name:"希腊酸奶",       cat:"蛋奶", p:4.5,  y:40.0,  e:1.00, note:"市售「希腊式」浓稠发酵乳"}
+];
+
+const $ = s => document.querySelector(s);
+const costPerGram = d => d.y / (d.p * 5 * d.e);
+
+$("#legend").innerHTML = Object.entries(CATS)
+  .map(([k,v]) => `<span><i style="background:${v}"></i>${k}</span>`).join("");
+
+/* ---------- 排名：棒棒糖 ---------- */
+function renderRanking(){
+  const rows = DATA.map(d => ({...d, val: costPerGram(d)})).sort((a,b) => a.val - b.val);
+  const W = 720, rowH = 30, M = {t: 8, r: 92, l: 128, b: 44};
+  const H = M.t + rows.length * rowH + M.b;
+  const maxVal = Math.max(...rows.map(r => r.val));
+  const plotW = W - M.l - M.r;
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="每克蛋白质价格排名">`;
+  for (let i = 1; i <= 4; i++){
+    const x = M.l + plotW * (i / 4);
+    s += `<line class="grid-line" x1="${x}" y1="${M.t}" x2="${x}" y2="${M.t + rows.length*rowH}" stroke-dasharray="2 4"/>`;
+  }
+  for (let i = 0; i <= 4; i++){
+    const x = M.l + plotW * (i / 4);
+    s += `<text class="axis" x="${x}" y="${M.t + rows.length*rowH + 26}" text-anchor="middle">${(maxVal*i/4).toFixed(2)}</text>`;
+  }
+  s += `<text class="axis" x="${M.l + plotW/2}" y="${M.t + rows.length*rowH + 44}" text-anchor="middle">元 / 克蛋白质</text>`;
+
+  rows.forEach((r, i) => {
+    const y = M.t + i * rowH + rowH/2;
+    const w = Math.max(1.5, plotW * r.val / maxVal);
+    const c = CATS[r.cat];
+    s += `<text class="bar-label" x="${M.l - 12}" y="${y + 4.5}" text-anchor="end">${r.name}</text>`;
+    s += `<line x1="${M.l}" y1="${y}" x2="${M.l + w}" y2="${y}" stroke="${c}" stroke-width="2" opacity=".5"/>`;
+    s += `<circle cx="${M.l + w}" cy="${y}" r="5" fill="${c}"/>`;
+    s += `<text class="val-label" x="${M.l + w + 12}" y="${y + 4.5}">${r.val.toFixed(3)}</text>`;
+  });
+  s += `</svg>`;
+  $("#chart-ranking").innerHTML = s;
+}
+
+/* ---------- 散点 ---------- */
+function renderScatter(){
+  const W = 720, H = 470, M = {t: 20, r: 92, l: 66, b: 54};
+  const plotW = W - M.l - M.r, plotH = H - M.t - M.b;
+  const xMax = 50, yMin = 2.5, yMax = 220;
+  const lx = v => M.l + plotW * (v / xMax);
+  const ly = v => M.t + plotH * (1 - (Math.log10(v) - Math.log10(yMin)) / (Math.log10(yMax) - Math.log10(yMin)));
+
+  const pts = DATA.map(d => {
+    const r = Math.max(4.5, Math.min(10, Math.sqrt(costPerGram(d)) * 7));
+    return {...d, cx: lx(d.p), cy: ly(d.y), r, label: d.name.replace(/（.*?）/,'')};
+  });
+
+  const placed = [];
+  const hits = box => placed.some(p => !(box[2] < p[0] || box[0] > p[2] || box[3] < p[1] || box[1] > p[3]));
+  pts.forEach(d => {
+    const w = d.label.length * 12.5 + 8;
+    const cands = [
+      {x: d.cx + d.r + 6, y: d.cy + 4,  a: "start"},
+      {x: d.cx - d.r - 6, y: d.cy + 4,  a: "end"},
+      {x: d.cx, y: d.cy - d.r - 9,      a: "middle"},
+      {x: d.cx, y: d.cy + d.r + 17,     a: "middle"},
+      {x: d.cx + d.r + 6, y: d.cy - 9,  a: "start"},
+      {x: d.cx - d.r - 6, y: d.cy + 17, a: "end"},
+      {x: d.cx + d.r + 6, y: d.cy + 17, a: "start"}
+    ];
+    let chosen = cands[0];
+    for (const c of cands){
+      const x1 = c.a === "start" ? c.x : c.a === "end" ? c.x - w : c.x - w/2;
+      const box = [x1, c.y - 12, x1 + w, c.y + 4];
+      if (!hits(box) && x1 > 2 && x1 + w < W - 2){ chosen = c; placed.push(box); break; }
+    }
+    d.lx = chosen.x; d.ly = chosen.y; d.anchor = chosen.a;
+  });
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="蛋白质含量与价格散点图">`;
+  [3,5,10,20,50,100,200].forEach(v => {
+    if (v < yMin || v > yMax) return;
+    const y = ly(v);
+    s += `<line class="grid-line" x1="${M.l}" y1="${y}" x2="${M.l+plotW}" y2="${y}" stroke-dasharray="2 4"/>`;
+    s += `<text class="axis" x="${M.l-10}" y="${y+4}" text-anchor="end">${v}</text>`;
+  });
+  [0,10,20,30,40,50].forEach(v => {
+    const x = lx(v);
+    s += `<line class="grid-line" x1="${x}" y1="${M.t}" x2="${x}" y2="${M.t+plotH}" stroke-dasharray="2 4"/>`;
+    s += `<text class="axis" x="${x}" y="${M.t+plotH+20}" text-anchor="middle">${v}</text>`;
+  });
+  s += `<text class="axis" x="${M.l+plotW/2}" y="${H-12}" text-anchor="middle">蛋白质（克 / 100 克食物）</text>`;
+  s += `<text class="axis" transform="translate(18,${M.t+plotH/2}) rotate(-90)" text-anchor="middle">价格（元 / 斤，对数）</text>`;
+  s += `<rect x="${M.l}" y="${ly(8)}" width="${plotW*0.78}" height="${M.t+plotH-ly(8)}" fill="#2e7d5b" opacity=".055"/>`;
+  s += `<text class="axis" x="${M.l+8}" y="${ly(8)-10}" fill="#2e7d5b" style="font-size:11.5px">便宜 + 蛋白高 → 越靠左下越划算</text>`;
+
+  pts.forEach(d => { s += `<circle cx="${d.cx}" cy="${d.cy}" r="${d.r}" fill="${CATS[d.cat]}" opacity=".78"/>`; });
+  pts.forEach(d => { s += `<text class="bar-label" x="${d.lx}" y="${d.ly}" text-anchor="${d.anchor}" style="font-size:11.5px">${d.label}</text>`; });
+  s += `</svg>`;
+  $("#chart-scatter").innerHTML = s;
+}
+
+/* ---------- 表格 ---------- */
+function renderTable(){
+  const rows = [...DATA].sort((a,b) => costPerGram(a) - costPerGram(b));
+  $("#tbl tbody").innerHTML = rows.map(d => `<tr>
+      <td><span class="cat-dot" style="background:${CATS[d.cat]}"></span>${d.name}</td>
+      <td style="color:var(--muted);font-size:13px">${d.cat}</td>
+      <td class="num">${d.p}</td>
+      <td class="num" style="color:${d.e < 1 ? 'var(--claret)' : 'var(--muted)'}">${d.e < 1 ? (d.e*100).toFixed(0)+'%' : '100%'}</td>
+      <td class="num">${d.y}</td>
+      <td class="num"><b>${costPerGram(d).toFixed(3)}</b></td>
+      <td style="font-size:13px;color:var(--muted)">${d.note}</td>
+    </tr>`).join("");
+}
+
+renderRanking();
+renderScatter();
+renderTable();
+</script>
+</body>
+</html>
