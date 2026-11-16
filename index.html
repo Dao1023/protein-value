@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>买蛋白质：哪种食物最划算</title>
-<meta name="description" content="22 种常见食物的蛋白质性价比：每克蛋白质要花多少钱。">
+<meta name="description" content="101 种食物品种的蛋白质性价比：每克蛋白质到底要花多少钱。数据取自《中国食物成分表》与北京终端零售价。">
 <style>
   :root{
     --paper:#fbf9f4; --ink:#1a1a1a; --muted:#6b665c; --rule:#d8d2c4;
@@ -74,6 +74,21 @@
   .cat-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px}
   .scroll{overflow-x:auto}
 
+  .filters{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:20px 0 4px;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font:inherit;font-size:13px;line-height:1;padding:7px 11px;border:1px solid var(--rule);background:#fff;color:#3a362e;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:6px}
+  .chip:hover{border-color:var(--ink)}
+  .chip i{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .chip .c{opacity:.55;font-size:11px;font-variant-numeric:tabular-nums}
+  .seg{display:inline-flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden;background:#fff}
+  .seg button{font:inherit;font-size:13px;padding:7px 13px;border:0;background:transparent;color:#3a362e;cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .count{font-size:13px;color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums}
+  .more{font:inherit;font-size:13px;margin-top:10px;padding:8px 14px;border:1px dashed var(--rule);background:transparent;color:var(--blue);cursor:pointer;width:100%;border-radius:4px}
+  .more:hover{border-color:var(--blue)}
+  .tag-k{font-size:10.5px;letter-spacing:.04em;color:var(--muted);border:1px solid var(--rule);border-radius:3px;padding:0 4px;margin-left:6px;vertical-align:1px}
+
   footer{margin-top:56px;border-top:2px solid var(--ink);padding:22px 0 60px;font-size:13px;color:var(--muted)}
   footer p{max-width:none}
   @media (max-width:640px){
@@ -94,11 +109,11 @@
 <div class="wrap">
 
   <div class="hero">
-    <div class="kicker">22 种常见食物的蛋白质账本</div>
+    <div class="kicker"><span id="kicker-n">101</span> 种食物品种的蛋白质账本</div>
     <h1>买蛋白质，<br>最划算的不是鸡胸肉，是<em>黄豆</em></h1>
     <p class="standfirst">
-      一斤黄豆 6.5 元，含 175 克蛋白质，折下来每克 0.037 元。同样一斤三文鱼柳 150 元、含 102 克蛋白质，
-      每克 1.47 元——为了同样的蛋白质，要多付 40 倍的钱。蛋白质含量和价格并不是一回事，
+      一斤黄豆 6.5 元，含 175 克蛋白质，折下来每克 0.037 元。同样一斤活扇贝 79 元，剥出来的可食部分只含 19 克蛋白质，
+      每克 4.07 元——为了同样的蛋白质，要多付 110 倍的钱。蛋白质含量和价格并不是一回事，
       下面把它们放在同一把尺子上量：算的都是真正吃到嘴里的那部分，带壳、带骨、带荚的先折可食部。
     </p>
     <div class="byline">蛋白质含量：中国食物成分表（第 6 版）/ USDA ｜ 价格：北京菜市场农贸价 + 商超/电商零售价（2026-11-16）</div>
@@ -106,9 +121,9 @@
 
   <div class="stats">
     <div class="stat"><div class="n">0.037<small> 元</small></div><div class="l">黄豆每克蛋白质，全表最低</div></div>
-    <div class="stat"><div class="n">1.471<small> 元</small></div><div class="l">三文鱼（冰鲜柳）每克蛋白质，全表最高</div></div>
-    <div class="stat"><div class="n">40<small>×</small></div><div class="l">两者差了 40 倍</div></div>
-    <div class="stat"><div class="n">35<small> g</small></div><div class="l">黄豆每 100 克含蛋白质，也是全表最高</div></div>
+    <div class="stat"><div class="n">4.07<small> 元</small></div><div class="l">活扇贝每克蛋白质，全表最高</div></div>
+    <div class="stat"><div class="n">110<small>×</small></div><div class="l">两者差了 110 倍</div></div>
+    <div class="stat"><div class="n">90<small> g</small></div><div class="l">大豆分离蛋白粉每 100 克含蛋白质，全表最高</div></div>
   </div>
 
   <!-- ========== 1. 排名 ========== -->
@@ -117,11 +132,20 @@
     <h2>每克蛋白质要花多少钱</h2>
     <p class="lede">把「每斤多少钱」除以「每斤含多少克蛋白质」，就是每克蛋白质的真实成本。数字越小越划算，它天然抹平了「一斤多少钱」的直觉误导。</p>
 
+    <div class="filters">
+      <div class="chips" id="chips"></div>
+      <div class="seg" id="density" role="group" aria-label="显示密度">
+        <button data-d="common" aria-pressed="false">只看常见</button>
+        <button data-d="all" aria-pressed="true">全部品种</button>
+      </div>
+      <div class="count" id="count"></div>
+    </div>
+
     <div class="chart-card">
       <div class="chart-head">
         <div>
           <p class="chart-title">每克蛋白质价格（元）</p>
-          <p class="chart-sub">横轴越短越划算 · 22 种食物</p>
+          <p class="chart-sub">横轴越短越划算 · 对数刻度，跨 110 倍 · <span id="rank-n">101</span> 种食物</p>
         </div>
       </div>
       <div class="legend" id="legend"></div>
@@ -165,6 +189,7 @@
           <tr><td>每 100 克（挂面煮熟后）</td><td class="num">13.3 g</td><td class="num">3.6–4.2 g</td><td>约 3.5×</td></tr>
         </tbody>
       </table>
+    <p class="footnote" id="pending"></p>
     </div>
     <p class="footnote" style="max-width:52em">挂面吸水 2.4 倍后，每 100 克熟面只剩 3.6–4.2 克蛋白质。所以「挂面和鸡蛋差不多」只在「干面条 vs 生鸡蛋」时成立；一旦端上桌，鸡蛋的蛋白密度是熟面条的三倍半。</p>
 
@@ -177,7 +202,7 @@
   <!-- ========== 4. 全表 ========== -->
   <section>
     <div class="sec-label">04 · 全表</div>
-    <h2>22 种食物，从最划算到最贵</h2>
+    <h2>全部品种，从最划算到最贵</h2>
     <div class="scroll">
       <table id="tbl">
         <caption>价格为中国大陆商超/菜场常见零售价（元/斤，2026-11）；蛋白质为每 100 克可食部</caption>
@@ -194,10 +219,12 @@
     <div class="sec-label">05 · 方法</div>
     <h2>数字从哪来，哪里还不确定</h2>
     <p><b>计算</b>：<code>元/克蛋白质 = 每斤价格 ÷（蛋白含量 × 5 × 食部）</code>。一斤 500 克，所以每斤含蛋白 C×5 克；再按可食部扣除壳、骨、荚。</p>
+    <p><b>品种</b>：同名食物拆到品种与部位——南豆腐 6.2、北豆腐 12.2、豆腐干 16.2、千张 24.5，相差四倍，把「豆腐」当成一个数就会算错。每行还带「常见 / 少见」标签，图上方可以按密度筛选。</p>
     <p><b>可食部</b>：带壳、带骨、带荚的食物按可食部折算——鸡蛋 88%、虾 67%、草鱼与鲈鱼 58%、毛豆 53%，其余按 100%。你付的是整只虾的钱，吃到的只有 67% 的肉；不折可食部，虾会被低估 1.5 倍，排到牛奶前面去。</p>
     <p><b>含量</b>：以中国疾控中心营养与健康所「食物营养成分查询平台」为准，即《中国食物成分表》在线版（<a href="https://nlc.chinanutri.cn/fq/">nlc.chinanutri.cn</a>）；三文鱼等表中未收录的用 USDA FoodData Central 补。谷物豆类取干重、馒头取熟重，逐行标注。</p>
     <p><b>价格</b>：统一取<b>零售</b>口径——生鲜用北京菜市场/农贸当日价（北京市价格监测中心、新发地行情各加品类加价校验），包装食品用商超与电商日常价（苏宁、京东自营，2026-11-16）。<b>批发价不进表</b>：批发比菜市低 30–150%（同日大白菜 0.31 vs 0.76 元/斤），拿批发价当买菜价会系统性低估。</p>
-    <p><b>已知局限</b>：① 价格随城市、季节、规格波动极大（三文鱼冰鲜/冻品差 2 倍，虾按头数差 1.5 倍），渠道误差约 10–20%；馒头、冻虾、真希腊酸奶三项暂无终端零售实证，取的是批发加价推算值。② 只算粗蛋白，没算氨基酸评分与消化率——按 DIAAS 修正（鸡蛋约 1.1、小麦约 0.5），鸡蛋其实比干挂面便宜一半。③ 没考虑烹饪损耗与时间成本。</p>
+    <p><b>补剂单独成组</b>：乳清蛋白粉、分离蛋白粉按 5 磅装电商常见价折算，不属日常食材，图里可单独筛出。</p>
+    <p><b>已知局限</b>：① 价格随城市、季节、规格波动极大（三文鱼冰鲜/冻品差 2 倍，虾按头数差 1.5 倍），渠道误差约 10–20%；表中约四成价格是新发地当日批发价 ×1.4–1.5 推算的零售价，note 列逐行标了「估」。② 只算粗蛋白，没算氨基酸评分与消化率——按 DIAAS 修正（鸡蛋约 1.1、小麦约 0.5），鸡蛋其实比干挂面便宜一半。③ 没考虑烹饪损耗与时间成本。</p>
     <p><b>关于主食</b>：谷物与豆制品统一按干重配干价。「米饭」因此换成生大米（3.5 元/斤）——熟饭 2.6g/100g 对应生米 7.4g/100g，两种读法相差近三倍，必须二选一。</p>
     <p><b>一句话</b>：以「每克蛋白质最便宜」为目标，主力应该是<b>豆制品、鸡蛋、鸡胸肉</b>；牛奶和三文鱼不是用来买蛋白质的，它们卖的是钙、口感和那点 omega-3。</p>
   </section>
@@ -209,147 +236,357 @@
 </div>
 
 <script>
-const CATS = {"主食":"var(--cat-zhushi)","杂食":"var(--cat-zashi)","蛋奶":"var(--cat-dannai)","肉类":"var(--cat-roulei)"};
+const FAMILIES = {
+  plant: ["豆类","豆制品","坚果种子"],
+  grain: ["谷物","面制品","薯类"],
+  dairy: ["蛋","奶制品"],
+  meat:  ["畜肉","禽肉"],
+  sea:   ["鱼","虾蟹贝"],
+  supp:  ["补剂"]
+};
+const FAM_LABEL = {plant:"植物蛋白", grain:"主食", dairy:"蛋奶", meat:"肉", sea:"水产", supp:"补剂"};
+const FAM_COLOR = {plant:"#2e7d5b", grain:"#0f5499", dairy:"#d97b1f", meat:"#990f3d", sea:"#0b6b73", supp:"#6b5f8a"};
+const famOf = g => {
+  for (const f in FAMILIES) if (FAMILIES[f].includes(g)) return f;
+  return "plant";
+};
 
-/* name, cat, protein g/100g, 元/斤, 口径说明 */
+/*DATA-START*/
 const DATA = [
-  {name:"黄豆（干）",     cat:"杂食", p:35.0, y:6.5,   e:1.00, note:"干重，植物蛋白之首"},
-  {name:"花生仁",         cat:"杂食", p:24.8, y:8.0,   e:1.00, note:"生花生仁"},
-  {name:"老豆腐",         cat:"杂食", p:12.2, y:4.0,   e:1.00, note:"北豆腐，含水较低"},
-  {name:"豆腐干",         cat:"杂食", p:16.2, y:6.5,   e:1.00, note:"白干/香干 12–20 取中"},
-  {name:"腐竹（干）",     cat:"杂食", p:44.6, y:20.0,  e:1.00, note:"散装干重；泡发后约 20g/100g"},
-  {name:"大米（生）",     cat:"主食", p:7.4,  y:3.5,   e:1.00, note:"干重。熟饭按 1:2.4 吸水折算"},
-  {name:"燕麦片（干）",   cat:"杂食", p:15.0, y:7.5,   e:1.00, note:"纯燕麦片，干重"},
-  {name:"鸡蛋",           cat:"蛋奶", p:13.3, y:6.0,   e:0.88, note:"全蛋；含壳，取食部 88%"},
-  {name:"馒头",           cat:"主食", p:7.8, y:4.0,    e:1.00, note:"标准粉，熟重"},
-  {name:"干挂面",         cat:"主食", p:10.1, y:6.0,   e:1.00, note:"干重；煮熟后 3.6–4.2"},
-  {name:"鸡胸肉",         cat:"肉类", p:19.4, y:12.5,  e:1.00, note:"去皮生重"},
-  {name:"嫩豆腐",         cat:"主食", p:6.2, y:4.0,    e:1.00, note:"南豆腐，含水较高"},
-  {name:"毛豆",           cat:"杂食", p:13.1, y:5.0,   e:0.53, note:"带荚买，食部仅 53%"},
-  {name:"猪里脊",         cat:"肉类", p:20.2, y:17.5,  e:1.00, note:"生重"},
-  {name:"草鱼",           cat:"肉类", p:16.6, y:11.0,  e:0.58, note:"整条买，去鳞去骨 58%"},
-  {name:"纯牛奶",         cat:"蛋奶", p:3.0,  y:5.0,   e:1.00, note:"全脂，约 10 元/L"},
-  {name:"鲈鱼",           cat:"肉类", p:18.6, y:23.0,  e:0.58, note:"整条买，去鳞去骨 58%"},
-  {name:"虾（冻白虾）",   cat:"肉类", p:18.3, y:32.0,  e:0.67, note:"带壳买，去壳 67%；20–25 头/斤"},
-  {name:"牛里脊",         cat:"肉类", p:22.2, y:58.0,  e:1.00, note:"牛柳，生重"},
-  {name:"希腊风味酸奶",   cat:"蛋奶", p:3.1,  y:10.0,  e:1.00, note:"安慕希一类，含糖，非过滤型"},
-  {name:"希腊酸奶（真）", cat:"蛋奶", p:9.0,  y:40.0,  e:1.00, note:"过滤型，吾岛/Fage 一类"},
-  {name:"三文鱼（冰鲜）", cat:"肉类", p:20.4, y:150.0, e:1.00, note:"鱼柳，无骨无皮"}
+  {name:"黄豆（干）", g:"豆类", p:35.0, y:6.5, e:1.0, k:"common", note:"干重，植物蛋白之首"},
+  {name:"小麦粉（标准粉，干重）", g:"谷物", p:11.2, y:2.14, e:1.0, k:"common", note:"干重，吸水率约0.6"},
+  {name:"青豆（干，青大豆）", g:"豆类", p:34.5, y:7.9, e:1.0, k:"less", note:"批发5.25×1.5估"},
+  {name:"北豆腐（卤水，老豆腐）", g:"豆制品", p:12.2, y:2.9, e:1.0, k:"common", note:"批发1.93×1.5估"},
+  {name:"玉米面（黄，干重）", g:"谷物", p:8.1, y:1.93, e:1.0, k:"common", note:"干重，煮粥吸水约6倍"},
+  {name:"黑豆（干）", g:"豆类", p:36.0, y:8.6, e:1.0, k:"common", note:"批发5.75×1.5估"},
+  {name:"大豆分离蛋白粉", g:"补剂", p:90.0, y:25.0, e:1.0, k:"less", note:"食品级大袋装折25元/斤"},
+  {name:"全麦粉（干重）", g:"谷物", p:15.1, y:4.5, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"猪肝（生）", g:"畜肉", p:19.3, y:6.0, e:0.99, k:"common", note:"生猪肝，价估"},
+  {name:"千张（百页，薄豆皮）", g:"豆制品", p:24.5, y:8.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"豆腐干（白干，散装）", g:"豆制品", p:16.2, y:5.6, e:1.0, k:"common", note:"批发3.75×1.5估"},
+  {name:"豆皮（干豆腐皮）", g:"豆制品", p:44.6, y:16.0, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"花生仁（生，去壳）", g:"坚果种子", p:24.8, y:9.0, e:1.0, k:"common", note:"批发6×1.5估"},
+  {name:"籼米（标准，干重）", g:"谷物", p:7.9, y:3.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"高粱米（干重）", g:"谷物", p:10.4, y:4.0, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"香干（卤制豆干）", g:"豆制品", p:18.0, y:7.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"糯米（江米，干重）", g:"谷物", p:7.3, y:2.99, e:1.0, k:"common", note:"干重，支链淀粉近100%"},
+  {name:"粳米（标一，干重）", g:"谷物", p:7.7, y:3.19, e:1.0, k:"common", note:"干重，煮饭吸水2.3倍"},
+  {name:"豆腐丝（干，袋装）", g:"豆制品", p:21.5, y:9.0, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"素鸡（豆制卷）", g:"豆制品", p:16.5, y:7.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"绿豆（干）", g:"豆类", p:21.6, y:9.4, e:1.0, k:"common", note:"批发6.25×1.5估"},
+  {name:"南豆腐（石膏，水豆腐）", g:"豆制品", p:6.2, y:2.9, e:1.0, k:"common", note:"批发1.93×1.5估"},
+  {name:"油豆腐（油炸豆泡）", g:"豆制品", p:17.0, y:8.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"大米（生）", g:"谷物", p:7.4, y:3.5, e:1.0, k:"common", note:"干重。熟饭按 1:2.4 吸水折算"},
+  {name:"红豆（赤小豆，干）", g:"豆类", p:20.2, y:9.6, e:1.0, k:"common", note:"批发6.4×1.5估 干重"},
+  {name:"荞麦（干重）", g:"谷物", p:9.3, y:4.5, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"鹰嘴豆（干）", g:"豆制品", p:20.0, y:10.0, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"猪后腿（生）", g:"畜肉", p:17.9, y:9.0, e:1.0, k:"common", note:"后腿，生重，价估"},
+  {name:"腐竹（干，袋装）", g:"豆制品", p:44.6, y:22.5, e:1.0, k:"common", note:"批发15×1.5估 干重"},
+  {name:"小米（干重）", g:"谷物", p:9.0, y:4.61, e:1.0, k:"common", note:"干重，煮粥吸水约8倍"},
+  {name:"馒头（标准粉）", g:"面制品", p:7.8, y:4.0, e:1.0, k:"common", note:"熟重"},
+  {name:"鸡胸肉（去皮生）", g:"禽肉", p:19.4, y:10.0, e:1.0, k:"common", note:"去皮，生重，价估"},
+  {name:"燕麦片（纯，干）", g:"谷物", p:14.4, y:7.5, e:1.0, k:"common", note:"干重"},
+  {name:"豆腐泡（鲜豆泡）", g:"豆制品", p:13.0, y:7.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"猪里脊（生）", g:"畜肉", p:20.2, y:11.44, e:1.0, k:"common", note:"里脊，生重"},
+  {name:"挂面（鸡蛋面干）", g:"面制品", p:11.0, y:6.5, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"干挂面", g:"面制品", p:10.1, y:6.0, e:1.0, k:"common", note:"干重；煮熟后 3.6–4.2"},
+  {name:"糙米（生，干重）", g:"谷物", p:7.5, y:4.5, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"黑米（生，干重）", g:"谷物", p:9.4, y:6.0, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"毛豆（鲜，带荚）", g:"豆类", p:13.1, y:4.6, e:0.53, k:"common", note:"批发3.25×1.4估 食部53%"},
+  {name:"鹌鹑蛋（全蛋）", g:"蛋", p:12.8, y:7.4, e:0.86, k:"less", note:"带壳，价估"},
+  {name:"意大利面（干）", g:"面制品", p:11.9, y:8.0, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"芝麻（白芝麻，籽）", g:"坚果种子", p:18.4, y:12.4, e:1.0, k:"common", note:"批发8.25×1.5估 高钙"},
+  {name:"鸭蛋（全蛋）", g:"蛋", p:12.6, y:7.5, e:0.87, k:"less", note:"生鸭蛋，价估"},
+  {name:"蛋清（鸡蛋清）", g:"蛋", p:11.6, y:8.0, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"内酯豆腐（盒装嫩豆腐）", g:"豆制品", p:5.0, y:3.6, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"米粉（干，细）", g:"面制品", p:8.0, y:6.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"鸭胸（去皮生）", g:"禽肉", p:15.0, y:12.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"鸡蛋（土鸡蛋，全蛋）", g:"蛋", p:14.4, y:10.6, e:0.88, k:"common", note:"柴鸡蛋，价估"},
+  {name:"整鸡（白条鸡）", g:"禽肉", p:19.3, y:10.66, e:0.66, k:"common", note:"白条鸡，带骨"},
+  {name:"藜麦（生，干重）", g:"谷物", p:14.1, y:12.0, e:1.0, k:"rare", note:"常见零售价估"},
+  {name:"鸡腿（带骨生）", g:"禽肉", p:16.0, y:9.5, e:0.69, k:"common", note:"琵琶腿，带骨，价估"},
+  {name:"乳清蛋白粉（浓缩 WPC80）", g:"补剂", p:80.0, y:70.0, e:1.0, k:"less", note:"5磅装约320元折70元/斤"},
+  {name:"酸奶（普通含糖）", g:"奶制品", p:9.0, y:8.0, e:1.0, k:"common", note:"含糖，价估"},
+  {name:"方便面（油炸，含调料）", g:"面制品", p:9.5, y:10.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"土豆（生）", g:"薯类", p:2.0, y:2.0, e:0.94, k:"common", note:"常见零售价估"},
+  {name:"草鱼（整鱼）", g:"鱼", p:16.6, y:10.31, e:0.58, k:"common", note:"整鱼，1000g/条"},
+  {name:"南瓜子（炒，带壳）", g:"坚果种子", p:36.0, y:26.3, e:0.68, k:"less", note:"批发17.5×1.5估 食部68%"},
+  {name:"豆腐乳（红方，瓶装）", g:"豆制品", p:11.0, y:12.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"豆浆（无糖，现磨）", g:"豆制品", p:1.8, y:2.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"猪五花（带骨）", g:"畜肉", p:13.6, y:12.0, e:0.79, k:"common", note:"硬五花，带骨，价估"},
+  {name:"酪蛋白（缓释）", g:"补剂", p:75.0, y:90.0, e:1.0, k:"rare", note:"5磅装约410元折90元/斤"},
+  {name:"乳清蛋白粉（分离 WPI90）", g:"补剂", p:90.0, y:110.0, e:1.0, k:"less", note:"5磅装约500元折110元/斤"},
+  {name:"豌豆（鲜，带荚）", g:"豆制品", p:7.4, y:4.0, e:0.42, k:"common", note:"常见零售价估"},
+  {name:"全麦面包（熟重）", g:"面制品", p:12.4, y:16.0, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"奶酪（切达）", g:"奶制品", p:22.2, y:30.0, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"白面包（均值，熟重）", g:"面制品", p:8.3, y:12.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"豆奶（豆乳，含糖）", g:"豆制品", p:2.4, y:3.5, e:1.0, k:"less", note:"常见零售价估"},
+  {name:"罗非鱼（整鱼）", g:"鱼", p:18.4, y:15.0, e:0.55, k:"common", note:"活，整鱼，价估"},
+  {name:"带鱼（冻，整条）", g:"鱼", p:17.7, y:20.45, e:0.76, k:"common", note:"冻，250g/条"},
+  {name:"鳕鱼（冻，整条）", g:"鱼", p:20.4, y:14.0, e:0.45, k:"less", note:"冻，整条，价估"},
+  {name:"玉米（黄，干）", g:"谷物", p:4.0, y:3.0, e:0.46, k:"common", note:"常见零售价估"},
+  {name:"纯牛奶（全脂）", g:"奶制品", p:3.0, y:5.0, e:1.0, k:"common", note:"约 10 元/L"},
+  {name:"鲫鱼（整鱼）", g:"鱼", p:17.1, y:16.0, e:0.54, k:"common", note:"整鱼，200g/条，价估"},
+  {name:"奶粉（全脂）", g:"奶制品", p:19.9, y:35.0, e:1.0, k:"common", note:"常见零售价估"},
+  {name:"排骨（猪大排，生）", g:"畜肉", p:18.3, y:22.0, e:0.68, k:"common", note:"纯排，带骨，价估"},
+  {name:"增肌粉（碳水混合）", g:"补剂", p:25.0, y:45.0, e:1.0, k:"rare", note:"5磅装约200元折45元/斤"},
+  {name:"牛奶（脱脂）", g:"奶制品", p:2.9, y:5.5, e:1.0, k:"less", note:"脱脂，价估"},
+  {name:"牛腩（生）", g:"畜肉", p:18.6, y:37.94, e:1.0, k:"common", note:"腑肋，生重"},
+  {name:"虾仁（海虾，去壳鲜）", g:"虾蟹贝", p:16.8, y:35.0, e:1.0, k:"common", note:"去壳鲜虾仁，价估"},
+  {name:"蛤蜊（花蛤，带壳）", g:"虾蟹贝", p:10.1, y:8.5, e:0.39, k:"common", note:"带壳活，价估"},
+  {name:"鲈鱼（整鱼）", g:"鱼", p:18.6, y:24.0, e:0.58, k:"common", note:"淡水鲈，活，价估"},
+  {name:"鱿鱼（鲜，去内脏）", g:"鱼", p:17.4, y:38.0, e:0.97, k:"common", note:"去头，鲜，价估"},
+  {name:"杏仁（国产甜杏仁）", g:"坚果种子", p:22.5, y:52.5, e:1.0, k:"less", note:"批发35×1.5估 苦杏仁勿食"},
+  {name:"牛腱（生）", g:"畜肉", p:20.1, y:45.0, e:0.94, k:"common", note:"后腱，带筋，价估"},
+  {name:"红薯（生）", g:"薯类", p:1.1, y:2.5, e:0.9, k:"common", note:"常见零售价估"},
+  {name:"鸡翅（带骨生）", g:"禽肉", p:17.4, y:31.0, e:0.69, k:"common", note:"翅中，带骨，价估"},
+  {name:"牛里脊（生）", g:"畜肉", p:22.2, y:58.0, e:1.0, k:"common", note:"牛柳，生重"},
+  {name:"芋头（鲜）", g:"薯类", p:2.2, y:5.0, e:0.84, k:"common", note:"常见零售价估"},
+  {name:"肥牛卷（生）", g:"畜肉", p:15.0, y:44.0, e:1.0, k:"common", note:"火锅卷，脂肪高，价估"},
+  {name:"核桃（带壳干核桃）", g:"坚果种子", p:14.9, y:18.8, e:0.43, k:"common", note:"批发12.5×1.5估 食部43%"},
+  {name:"黄花鱼（大黄鱼）", g:"鱼", p:17.7, y:36.0, e:0.66, k:"common", note:"鲜，250g/条，价估"},
+  {name:"希腊风味酸奶", g:"奶制品", p:3.1, y:10.0, e:1.0, k:"common", note:"含糖，非过滤型"},
+  {name:"腰果（生，去壳）", g:"坚果种子", p:17.3, y:65.3, e:1.0, k:"less", note:"批发43.5×1.5估"},
+  {name:"山药（鲜）", g:"薯类", p:1.9, y:6.0, e:0.83, k:"common", note:"常见零售价估"},
+  {name:"希腊酸奶（过滤型）", g:"奶制品", p:9.0, y:40.0, e:1.0, k:"less", note:"吾岛/Fage 一类"},
+  {name:"三文鱼（冰鲜柳）", g:"鱼", p:20.4, y:150.0, e:1.0, k:"less", note:"无骨无皮"},
+  {name:"蟹（河蟹，带壳）", g:"虾蟹贝", p:17.5, y:70.0, e:0.42, k:"less", note:"母蟹，125g，价估"},
+  {name:"榛子（带壳干榛子）", g:"坚果种子", p:20.0, y:52.5, e:0.27, k:"less", note:"批发35×1.5估 食部27%"},
+  {name:"虾（基围虾，带壳）", g:"虾蟹贝", p:18.2, y:160.0, e:0.6, k:"less", note:"新发地115×1.4估"},
+  {name:"扇贝（带壳活）", g:"虾蟹贝", p:11.1, y:79.0, e:0.35, k:"less", note:"新发地56.5×1.4估"},
 ];
+/*DATA-END*/
 
 const $ = s => document.querySelector(s);
 const costPerGram = d => d.y / (d.p * 5 * d.e);
+const state = { density: "all", fam: new Set(), expand: false };
+const LIMIT = 26;
 
-$("#legend").innerHTML = Object.entries(CATS)
-  .map(([k,v]) => `<span><i style="background:${v}"></i>${k}</span>`).join("");
-
-/* ---------- 排名：棒棒糖 ---------- */
-function renderRanking(){
-  const rows = DATA.map(d => ({...d, val: costPerGram(d)})).sort((a,b) => a.val - b.val);
-  const W = 720, rowH = 30, M = {t: 8, r: 92, l: 128, b: 44};
-  const H = M.t + rows.length * rowH + M.b;
-  const maxVal = Math.max(...rows.map(r => r.val));
-  const plotW = W - M.l - M.r;
-
-  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="每克蛋白质价格排名">`;
-  for (let i = 1; i <= 4; i++){
-    const x = M.l + plotW * (i / 4);
-    s += `<line class="grid-line" x1="${x}" y1="${M.t}" x2="${x}" y2="${M.t + rows.length*rowH}" stroke-dasharray="2 4"/>`;
-  }
-  for (let i = 0; i <= 4; i++){
-    const x = M.l + plotW * (i / 4);
-    s += `<text class="axis" x="${x}" y="${M.t + rows.length*rowH + 26}" text-anchor="middle">${(maxVal*i/4).toFixed(2)}</text>`;
-  }
-  s += `<text class="axis" x="${M.l + plotW/2}" y="${M.t + rows.length*rowH + 44}" text-anchor="middle">元 / 克蛋白质</text>`;
-
-  rows.forEach((r, i) => {
-    const y = M.t + i * rowH + rowH/2;
-    const w = Math.max(1.5, plotW * r.val / maxVal);
-    const c = CATS[r.cat];
-    s += `<text class="bar-label" x="${M.l - 12}" y="${y + 4.5}" text-anchor="end">${r.name}</text>`;
-    s += `<line x1="${M.l}" y1="${y}" x2="${M.l + w}" y2="${y}" stroke="${c}" stroke-width="2" opacity=".5"/>`;
-    s += `<circle cx="${M.l + w}" cy="${y}" r="5" fill="${c}"/>`;
-    s += `<text class="val-label" x="${M.l + w + 12}" y="${y + 4.5}">${r.val.toFixed(3)}</text>`;
-  });
-  s += `</svg>`;
-  $("#chart-ranking").innerHTML = s;
+function visible(){
+  let rows = DATA.filter(d => d.p > 0 && d.y > 0);
+  if (state.density === "common") rows = rows.filter(d => d.k === "common");
+  if (state.fam.size) rows = rows.filter(d => state.fam.has(famOf(d.g)));
+  return rows;
 }
 
-/* ---------- 散点 ---------- */
-function renderScatter(){
-  const W = 720, H = 470, M = {t: 20, r: 92, l: 66, b: 54};
-  const plotW = W - M.l - M.r, plotH = H - M.t - M.b;
-  const xMax = 50, yMin = 2.5, yMax = 220;
-  const lx = v => M.l + plotW * (v / xMax);
-  const ly = v => M.t + plotH * (1 - (Math.log10(v) - Math.log10(yMin)) / (Math.log10(yMax) - Math.log10(yMin)));
+function renderControls(){
+  const base = DATA.filter(d => state.density === "all" || d.k === "common");
+  $("#chips").innerHTML = Object.keys(FAMILIES).map(f => {
+    const n = base.filter(d => famOf(d.g) === f).length;
+    const on = state.fam.has(f) ? "true" : "false";
+    return `<button class="chip" data-f="${f}" aria-pressed="${on}"><i style="background:${FAM_COLOR[f]}"></i>${FAM_LABEL[f]} <span class="c">${n}</span></button>`;
+  }).join("");
 
-  const pts = DATA.map(d => {
-    const r = Math.max(4.5, Math.min(10, Math.sqrt(costPerGram(d)) * 7));
-    return {...d, cx: lx(d.p), cy: ly(d.y), r, label: d.name.replace(/（.*?）/,'')};
+  $("#chips").querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => {
+    const f = b.dataset.f;
+    state.fam.has(f) ? state.fam.delete(f) : state.fam.add(f);
+    state.expand = false; render();
+  }));
+
+  $("#density").querySelectorAll("button").forEach(b => {
+    b.setAttribute("aria-pressed", String(b.dataset.d === state.density));
+    b.onclick = () => { state.density = b.dataset.d; state.expand = false; render(); };
+  });
+
+  const rows = visible();
+  const missing = DATA.length - DATA.filter(d => d.p > 0 && d.y > 0).length;
+  $("#count").textContent = `显示 ${rows.length} / ${DATA.length} 种${missing ? ` · ${missing} 项缺价格` : ""}`;
+  $("#kicker-n").textContent = DATA.length;
+  const rn = $("#rank-n"); if (rn) rn.textContent = DATA.length;
+  const pend = DATA.filter(d => !(d.p > 0 && d.y > 0));
+  const pn = $("#pending");
+  if (pn) pn.innerHTML = pend.length
+    ? `缺价格证据、暂未计入 ${pend.length} 项：` + pend.map(d => d.name).join("、")
+    : "";
+}
+
+/* ---------- 排名：棒棒糖 ---------- */
+function renderRanking(rows){
+  const all = rows.map(d => ({...d, val: costPerGram(d)})).sort((a,b) => a.val - b.val);
+  const total = all.length;
+  const HEAD = 14, TAIL = 10;
+  let items;
+  if (!state.expand && total > HEAD + TAIL + 2){
+    items = all.slice(0, HEAD).map(d => ({d}))
+      .concat([{gap: total - HEAD - TAIL}])
+      .concat(all.slice(-TAIL).map(d => ({d})));
+  } else {
+    items = all.map(d => ({d}));
+  }
+
+  const W = 720, rowH = 29, gapH = 34, M = {t: 8, r: 96, l: 156, b: 44};
+  const bodyH = items.reduce((h, it) => h + (it.gap ? gapH : rowH), 0);
+  const H = M.t + bodyH + M.b;
+  const plotW = W - M.l - M.r;
+  const l0 = Math.log10(0.03), l1 = Math.log10(5.0);
+  const xf = v => M.l + plotW * (Math.log10(Math.min(Math.max(v, 0.03), 5.0)) - l0) / (l1 - l0);
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="每克蛋白质价格排名">`;
+  [0.05, 0.1, 0.3, 1, 3].forEach(v => {
+    const x = xf(v);
+    s += `<line class="grid-line" x1="${x}" y1="${M.t}" x2="${x}" y2="${M.t + bodyH}" stroke-dasharray="2 4"/>`;
+    s += `<text class="axis" x="${x}" y="${M.t + bodyH + 26}" text-anchor="middle">${v}</text>`;
+  });
+  s += `<text class="axis" x="${M.l + plotW/2}" y="${M.t + bodyH + 44}" text-anchor="middle">元 / 克蛋白质（对数刻度）</text>`;
+
+  let y = M.t;
+  items.forEach(it => {
+    if (it.gap){
+      const cy = y + gapH/2;
+      s += `<line x1="${M.l}" y1="${cy}" x2="${M.l + plotW}" y2="${cy}" stroke="#d8d2c4" stroke-dasharray="3 5"/>`;
+      s += `<text class="axis" x="${M.l + plotW - 8}" y="${cy - 8}" text-anchor="end">中间 ${it.gap} 种省略 · 展开看全部</text>`;
+      y += gapH; return;
+    }
+    const d = it.d, cy = y + rowH/2, x = xf(d.val), c = FAM_COLOR[famOf(d.g)];
+    const label = d.name.length > 11 ? d.name.slice(0, 10) + "…" : d.name;
+    s += `<text class="bar-label" x="${M.l - 12}" y="${cy + 4.5}" text-anchor="end">${label}</text>`;
+    s += `<line x1="${M.l}" y1="${cy}" x2="${x}" y2="${cy}" stroke="${c}" stroke-width="2" opacity=".45"/>`;
+    s += `<circle cx="${x}" cy="${cy}" r="4.6" fill="${c}"/>`;
+    s += `<text class="val-label" x="${x + 12}" y="${cy + 4.5}">${d.val.toFixed(3)}</text>`;
+    y += rowH;
+  });
+  s += `</svg>`;
+  $("#chart-ranking").innerHTML = s + (total > HEAD + TAIL + 2 && !state.expand
+    ? `<button class="more" id="more">展开全部 ${total} 种</button>` : "");
+  const mb = $("#more");
+  if (mb) mb.onclick = () => { state.expand = true; render(); };
+}
+
+
+
+/* ---------- 散点 ---------- */
+function renderScatter(rows){
+  const W = 720, H = 470, M = {t: 20, r: 96, l: 66, b: 54};
+  const plotW = W - M.l - M.r, plotH = H - M.t - M.b;
+  const xMax = 95, yMin = 2, yMax = 250;
+  const lx = v => M.l + plotW * (Math.min(v, xMax) / xMax);
+  const ly = v => M.t + plotH * (1 - (Math.log10(Math.min(v,yMax)) - Math.log10(yMin)) / (Math.log10(yMax) - Math.log10(yMin)));
+
+  const pts = rows.map(d => {
+    const r = Math.max(4, Math.min(9, Math.sqrt(costPerGram(d)) * 7));
+    return {...d, cx: lx(d.p), cy: ly(d.y), r, label: d.name.replace(/（.*?）/g,'')};
   });
 
   const placed = [];
   const hits = box => placed.some(p => !(box[2] < p[0] || box[0] > p[2] || box[3] < p[1] || box[1] > p[3]));
+  const tw = t => [...t].reduce((n, ch) => n + (ch.charCodeAt(0) > 255 ? 10.6 : 5.9), 0) + 4;
   pts.forEach(d => {
-    const w = d.label.length * 12.5 + 8;
+    const w = tw(d.label);
     const cands = [
-      {x: d.cx + d.r + 6, y: d.cy + 4,  a: "start"},
-      {x: d.cx - d.r - 6, y: d.cy + 4,  a: "end"},
-      {x: d.cx, y: d.cy - d.r - 9,      a: "middle"},
-      {x: d.cx, y: d.cy + d.r + 17,     a: "middle"},
-      {x: d.cx + d.r + 6, y: d.cy - 9,  a: "start"},
-      {x: d.cx - d.r - 6, y: d.cy + 17, a: "end"},
-      {x: d.cx + d.r + 6, y: d.cy + 17, a: "start"}
+      {x: d.cx + d.r + 5, y: d.cy + 4,  a: "start"},
+      {x: d.cx - d.r - 5, y: d.cy + 4,  a: "end"},
+      {x: d.cx, y: d.cy - d.r - 8,      a: "middle"},
+      {x: d.cx, y: d.cy + d.r + 14,     a: "middle"},
+      {x: d.cx + d.r + 5, y: d.cy - 9,  a: "start"},
+      {x: d.cx - d.r - 5, y: d.cy + 14, a: "end"}
     ];
-    let chosen = cands[0];
+    d.hideLabel = true;
     for (const c of cands){
       const x1 = c.a === "start" ? c.x : c.a === "end" ? c.x - w : c.x - w/2;
-      const box = [x1, c.y - 12, x1 + w, c.y + 4];
-      if (!hits(box) && x1 > 2 && x1 + w < W - 2){ chosen = c; placed.push(box); break; }
+      const box = [x1, c.y - 10, x1 + w, c.y + 3];
+      if (!hits(box) && x1 > 2 && x1 + w < W - 2){
+        d.lx = c.x; d.ly = c.y; d.anchor = c.a; d.hideLabel = false;
+        placed.push(box); break;
+      }
     }
-    d.lx = chosen.x; d.ly = chosen.y; d.anchor = chosen.a;
   });
 
   let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="蛋白质含量与价格散点图">`;
-  [3,5,10,20,50,100,200].forEach(v => {
+  [2,5,10,20,50,100,200].forEach(v => {
     if (v < yMin || v > yMax) return;
     const y = ly(v);
     s += `<line class="grid-line" x1="${M.l}" y1="${y}" x2="${M.l+plotW}" y2="${y}" stroke-dasharray="2 4"/>`;
     s += `<text class="axis" x="${M.l-10}" y="${y+4}" text-anchor="end">${v}</text>`;
   });
-  [0,10,20,30,40,50].forEach(v => {
+  [0,20,40,60,80].forEach(v => {
     const x = lx(v);
     s += `<line class="grid-line" x1="${x}" y1="${M.t}" x2="${x}" y2="${M.t+plotH}" stroke-dasharray="2 4"/>`;
     s += `<text class="axis" x="${x}" y="${M.t+plotH+20}" text-anchor="middle">${v}</text>`;
   });
   s += `<text class="axis" x="${M.l+plotW/2}" y="${H-12}" text-anchor="middle">蛋白质（克 / 100 克食物）</text>`;
   s += `<text class="axis" transform="translate(18,${M.t+plotH/2}) rotate(-90)" text-anchor="middle">价格（元 / 斤，对数）</text>`;
-  s += `<rect x="${M.l}" y="${ly(8)}" width="${plotW*0.78}" height="${M.t+plotH-ly(8)}" fill="#2e7d5b" opacity=".055"/>`;
-  s += `<text class="axis" x="${M.l+8}" y="${ly(8)-10}" fill="#2e7d5b" style="font-size:11.5px">便宜 + 蛋白高 → 越靠左下越划算</text>`;
-
-  pts.forEach(d => { s += `<circle cx="${d.cx}" cy="${d.cy}" r="${d.r}" fill="${CATS[d.cat]}" opacity=".78"/>`; });
-  pts.forEach(d => { s += `<text class="bar-label" x="${d.lx}" y="${d.ly}" text-anchor="${d.anchor}" style="font-size:11.5px">${d.label}</text>`; });
+  // 等高线渐变背景：等成本线 = y(元/斤) = 5 × 成本 × 蛋白量
+  const hex2rgb = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
+  const RAMP = [[0.03,"#2f7d52"],[0.08,"#7fa86a"],[0.22,"#e6d5a4"],[0.55,"#d29362"],[1.1,"#b04a3c"],[3.2,"#7c1030"]];
+  const rampColor = c => {
+    const lc = Math.log(c);
+    for (let i = 1; i < RAMP.length; i++){
+      const [c1,h1] = RAMP[i-1], [c2,h2] = RAMP[i];
+      if (lc <= Math.log(c2) || i === RAMP.length-1){
+        const t = Math.max(0, Math.min(1, (lc - Math.log(c1)) / (Math.log(c2) - Math.log(c1))));
+        const a = hex2rgb(h1), b = hex2rgb(h2);
+        return `rgb(${Math.round(a[0]+(b[0]-a[0])*t)},${Math.round(a[1]+(b[1]-a[1])*t)},${Math.round(a[2]+(b[2]-a[2])*t)})`;
+      }
+    }
+    return RAMP[RAMP.length-1][1];
+  };
+  const clampY = v => Math.max(yMin, Math.min(yMax, v));
+  s += `<clipPath id="plotclip"><rect x="${M.l}" y="${M.t}" width="${plotW}" height="${plotH}"/></clipPath>`;
+  s += `<g clip-path="url(#plotclip)">`;
+  const CB = 46, cLo = 0.022, cHi = 3.4, SEG = 20;
+  for (let i = 0; i < CB; i++){
+    const c1 = cLo * Math.pow(cHi/cLo, i/CB), c2 = cLo * Math.pow(cHi/cLo, (i+1)/CB);
+    const up = [], dn = [];
+    for (let k = 0; k <= SEG; k++){
+      const pv = xMax * k / SEG, px = lx(pv);
+      up.push([px, ly(clampY(5*c2*pv))]);
+      dn.push([px, ly(clampY(5*c1*pv))]);
+    }
+    const pts = up.concat(dn.reverse()).map(q => q[0].toFixed(1)+","+q[1].toFixed(1)).join(" ");
+    s += `<polygon points="${pts}" fill="${rampColor(Math.sqrt(c1*c2))}" opacity=".17"/>`;
+  }
+  // 等成本线 + 标注
+  [0.05, 0.1, 0.2, 0.5, 1.0].forEach(c => {
+    let d = "";
+    for (let k = 0; k <= SEG; k++){
+      const pv = xMax * k / SEG;
+      d += (k ? " L" : "M") + lx(pv).toFixed(1) + " " + ly(clampY(5*c*pv)).toFixed(1);
+    }
+    s += `<path d="${d}" fill="none" stroke="#ffffff" stroke-width="1.4" opacity=".55"/>`;
+    s += `<path d="${d}" fill="none" stroke="${rampColor(c)}" stroke-width=".9" opacity=".45"/>`;
+  });
+  s += `</g>`;
+  [0.05,0.1,0.2,0.5,1.0].forEach(c => {
+    const pv = 88, yy = ly(clampY(5*c*pv));
+    if (yy > M.t + 8 && yy < M.t + plotH - 4)
+      s += `<text x="${lx(pv)+4}" y="${yy-3}" style="font-size:9.5px" fill="#6b6459" opacity=".85">${c} 元/g</text>`;
+  });
+  pts.forEach(d => {
+    s += `<circle cx="${d.cx}" cy="${d.cy}" r="${d.r}" fill="${FAM_COLOR[famOf(d.g)]}" opacity=".8">`
+       + `<title>${d.name} · ${d.p}g/100g · ${d.y}元/斤 · ${costPerGram(d).toFixed(3)} 元/g</title></circle>`;
+  });
+  pts.forEach(d => {
+    if (d.hideLabel) return;
+    s += `<text x="${d.lx}" y="${d.ly}" text-anchor="${d.anchor}" style="font-size:10.5px;paint-order:stroke;stroke:#fbf9f4;stroke-width:3px;stroke-linejoin:round;fill:#33302a">${d.label}</text>`;
+  });
   s += `</svg>`;
   $("#chart-scatter").innerHTML = s;
 }
 
 /* ---------- 表格 ---------- */
-function renderTable(){
-  const rows = [...DATA].sort((a,b) => costPerGram(a) - costPerGram(b));
-  $("#tbl tbody").innerHTML = rows.map(d => `<tr>
-      <td><span class="cat-dot" style="background:${CATS[d.cat]}"></span>${d.name}</td>
-      <td style="color:var(--muted);font-size:13px">${d.cat}</td>
+function renderTable(rows){
+  const list = [...rows].sort((a,b) => costPerGram(a) - costPerGram(b));
+  $("#tbl tbody").innerHTML = list.map(d => `<tr>
+      <td><span class="cat-dot" style="background:${FAM_COLOR[famOf(d.g)]}"></span>${d.name}${d.k !== "common" ? '<span class="tag-k">少见</span>' : ""}</td>
+      <td style="color:var(--muted);font-size:13px">${d.g}</td>
       <td class="num">${d.p}</td>
-      <td class="num" style="color:${d.e < 1 ? 'var(--claret)' : 'var(--muted)'}">${d.e < 1 ? (d.e*100).toFixed(0)+'%' : '100%'}</td>
+      <td class="num" style="color:${d.e < 1 ? "var(--claret)" : "var(--muted)"}">${d.e < 1 ? (d.e*100).toFixed(0)+"%" : "100%"}</td>
       <td class="num">${d.y}</td>
       <td class="num"><b>${costPerGram(d).toFixed(3)}</b></td>
       <td style="font-size:13px;color:var(--muted)">${d.note}</td>
     </tr>`).join("");
 }
 
-renderRanking();
-renderScatter();
-renderTable();
+function render(){
+  const rows = visible();
+  renderControls();
+  renderRanking(rows);
+  renderScatter(rows);
+  renderTable(rows);
+}
+
+render();
+
 </script>
 </body>
 </html>
