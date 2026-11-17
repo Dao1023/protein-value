@@ -65,6 +65,24 @@
   .gym-hint b{font-variant-numeric:tabular-nums}
   #fitness{scroll-margin-top:88px}
 
+  /* 06 健身：窄屏把两张小表折成卡片，避免横向滚动 */
+  @media (max-width:640px){
+    #fitness table thead{display:none}
+    #fitness caption{display:block;width:auto;padding:0 0 10px}
+    #fitness table{width:100%}
+    #fitness table,#fitness tbody,#fitness tr,#fitness td{display:block;width:auto}
+    #fitness tr{border-bottom:1px solid #eae5d8;padding:12px 0 10px}
+    #fitness tr:last-child{border-bottom:none}
+    #fitness td{border:0;padding:2px 0;display:flex;justify-content:space-between;gap:16px;
+      white-space:normal;font-size:14px}
+    #fitness td::before{content:attr(data-l);color:var(--muted);font-size:12px;letter-spacing:.04em;flex:0 0 auto}
+    #fitness td:first-child{font-weight:700;padding-bottom:7px;font-size:15px}
+    #fitness td:first-child::before{content:none}
+    #fitness td.num{text-align:right}
+    #fitness .scroll{overflow-x:visible}
+  }
+
+
   .pull{border-left:3px solid var(--claret);padding:6px 0 6px 20px;margin:30px 0;
     font-family:Georgia,"Songti SC",serif;font-size:21px;line-height:1.45;color:#211f1b}
   .pull span{color:var(--muted);font-size:15px;display:block;margin-top:8px;font-family:inherit}
@@ -284,12 +302,12 @@
         <caption>按体重换算的每日目标（1.6 g/kg 口径，可吸收蛋白当量）</caption>
         <thead><tr><th>体重</th><th class="num">每天需可吸收蛋白</th><th class="num">每餐（×4）</th><th class="num">黄豆方案每天花费</th><th class="num">鸡胸方案每天花费</th></tr></thead>
         <tbody>
-          <tr><td>50 kg</td><td class="num">80 g</td><td class="num">20 g</td><td class="num">3.49 元</td><td class="num">7.86 元</td></tr>
-          <tr><td>60 kg</td><td class="num">96 g</td><td class="num">24 g</td><td class="num">4.19 元</td><td class="num">9.43 元</td></tr>
-          <tr><td><b>70 kg</b></td><td class="num">112 g</td><td class="num">28 g</td><td class="num">4.89 元</td><td class="num">11.00 元</td></tr>
-          <tr><td>80 kg</td><td class="num">128 g</td><td class="num">32 g</td><td class="num">5.59 元</td><td class="num">12.57 元</td></tr>
-          <tr><td>90 kg</td><td class="num">144 g</td><td class="num">36 g</td><td class="num">6.29 元</td><td class="num">14.14 元</td></tr>
-        </tbody>
+          <tr><td data-l="体重">50 kg</td><td class="num" data-l="每天需可吸收蛋白">80 g</td><td class="num" data-l="每餐（×4）">20 g</td><td class="num" data-l="黄豆方案每天花费">3.49 元</td><td class="num" data-l="鸡胸方案每天花费">7.86 元</td></tr>
+          <tr><td data-l="体重">60 kg</td><td class="num" data-l="每天需可吸收蛋白">96 g</td><td class="num" data-l="每餐（×4）">24 g</td><td class="num" data-l="黄豆方案每天花费">4.19 元</td><td class="num" data-l="鸡胸方案每天花费">9.43 元</td></tr>
+          <tr><td data-l="体重"><b>70 kg</b></td><td class="num" data-l="每天需可吸收蛋白">112 g</td><td class="num" data-l="每餐（×4）">28 g</td><td class="num" data-l="黄豆方案每天花费">4.89 元</td><td class="num" data-l="鸡胸方案每天花费">11.00 元</td></tr>
+          <tr><td data-l="体重">80 kg</td><td class="num" data-l="每天需可吸收蛋白">128 g</td><td class="num" data-l="每餐（×4）">32 g</td><td class="num" data-l="黄豆方案每天花费">5.59 元</td><td class="num" data-l="鸡胸方案每天花费">12.57 元</td></tr>
+          <tr><td data-l="体重">90 kg</td><td class="num" data-l="每天需可吸收蛋白">144 g</td><td class="num" data-l="每餐（×4）">36 g</td><td class="num" data-l="黄豆方案每天花费">6.29 元</td><td class="num" data-l="鸡胸方案每天花费">14.14 元</td></tr>
+      </tbody>
       </table>
     </div>
     <p class="footnote" style="border-top:none;padding-top:0;margin-top:4px">花费 = 目标可吸收蛋白 ÷ 该食物的吸收系数 × 它的元/克蛋白（黄豆 0.85 与 0.0436，鸡胸 1.05 与 0.0982，均取自本表 102 行数据）。</p>
@@ -301,12 +319,12 @@
         <caption>凑够 112 克可吸收蛋白，五种买法的成本（70 kg）</caption>
         <thead><tr><th>方案</th><th class="num">吸收系数</th><th class="num">元/克可吸收蛋白</th><th class="num">每天要吃（食物）</th><th class="num">每天花费</th></tr></thead>
         <tbody>
-          <tr><td>黄豆（干）</td><td class="num">0.85</td><td class="num">0.044</td><td class="num">376 g</td><td class="num"><b>4.89 元</b></td></tr>
-          <tr><td>北豆腐</td><td class="num">0.75</td><td class="num">0.063</td><td class="num">1,224 g</td><td class="num">7.09 元</td></tr>
-          <tr><td>鸡蛋（红皮，全蛋）</td><td class="num">1.13</td><td class="num">0.081</td><td class="num">880 g</td><td class="num">9.08 元</td></tr>
-          <tr><td>鸡胸肉（去皮生）</td><td class="num">1.05</td><td class="num">0.098</td><td class="num">523 g</td><td class="num">11.00 元</td></tr>
-          <tr><td>乳清蛋白粉 WPC80</td><td class="num">1.14</td><td class="num">0.153</td><td class="num">123 g</td><td class="num">17.19 元</td></tr>
-        </tbody>
+          <tr><td data-l="方案">黄豆（干）</td><td class="num" data-l="吸收系数">0.85</td><td class="num" data-l="元/克可吸收蛋白">0.044</td><td class="num" data-l="每天要吃（食物）">376 g</td><td class="num" data-l="每天花费"><b>4.89 元</b></td></tr>
+          <tr><td data-l="方案">北豆腐</td><td class="num" data-l="吸收系数">0.75</td><td class="num" data-l="元/克可吸收蛋白">0.063</td><td class="num" data-l="每天要吃（食物）">1,224 g</td><td class="num" data-l="每天花费">7.09 元</td></tr>
+          <tr><td data-l="方案">鸡蛋（红皮，全蛋）</td><td class="num" data-l="吸收系数">1.13</td><td class="num" data-l="元/克可吸收蛋白">0.081</td><td class="num" data-l="每天要吃（食物）">880 g</td><td class="num" data-l="每天花费">9.08 元</td></tr>
+          <tr><td data-l="方案">鸡胸肉（去皮生）</td><td class="num" data-l="吸收系数">1.05</td><td class="num" data-l="元/克可吸收蛋白">0.098</td><td class="num" data-l="每天要吃（食物）">523 g</td><td class="num" data-l="每天花费">11.00 元</td></tr>
+          <tr><td data-l="方案">乳清蛋白粉 WPC80</td><td class="num" data-l="吸收系数">1.14</td><td class="num" data-l="元/克可吸收蛋白">0.153</td><td class="num" data-l="每天要吃（食物）">123 g</td><td class="num" data-l="每天花费">17.19 元</td></tr>
+      </tbody>
       </table>
     </div>
 
