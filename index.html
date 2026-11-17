@@ -80,6 +80,7 @@
     #fitness td:first-child::before{content:none}
     #fitness td.num{text-align:right}
     #fitness .scroll{overflow-x:visible}
+    #fitness .chart-card{padding:16px 14px 8px}
   }
 
 
@@ -312,35 +313,59 @@
     </div>
     <p class="footnote" style="border-top:none;padding-top:0;margin-top:4px">花费 = 目标可吸收蛋白 ÷ 该食物的吸收系数 × 它的元/克蛋白（黄豆 0.85 与 0.0436，鸡胸 1.05 与 0.0982，均取自本表 102 行数据）。</p>
 
-    <p style="margin-top:22px"><b>同一个 112 克，吃法不同差 3.5 倍。</b>下表全部按 70 公斤、每天 112 克可吸收蛋白算；「每天要吃」那列是折算吸收率之后的<b>食物克数</b>——黄豆、豆腐要吃一大碗，鸡蛋和鸡胸不到一斤。</p>
+    <p style="margin-top:22px"><b>同一个 <span id="fit-copy-g">112</span> 克，吃法不同差 <span id="fit-copy-x">3.5</span> 倍。</b>下表全部按 <span id="fit-copy-kg">70</span> 公斤、每天 <span id="fit-copy-g2">112</span> 克可吸收蛋白算；「每天要吃」那列是折算消化率之后的<b>食物克数</b>——黄豆、豆腐要吃一大碗，鸡蛋和鸡胸不到一斤。</p>
+
+    <div class="chart-card">
+      <div class="chart-head">
+        <div>
+          <p class="chart-title">同样 <span id="fitcost-g">112</span> 克可吸收蛋白，买法差 <span id="fitcost-x">3.5</span> 倍</p>
+          <p class="chart-sub" id="fitcost-sub">按当前体重 70 kg · 每天花费（元）· 括号内是每天要吃的食物克数</p>
+        </div>
+      </div>
+      <div id="chart-fitcost"></div>
+    </div>
 
     <div class="scroll">
-      <table>
-        <caption>凑够 112 克可吸收蛋白，五种买法的成本（70 kg）</caption>
+      <table id="fit-cost-table">
+        <caption>凑够 <span id="fit-table-g">112</span> 克可吸收蛋白，五种买法的成本（<span id="fit-table-kg">70</span> kg）</caption>
         <thead><tr><th>方案</th><th class="num">吸收系数</th><th class="num">元/克可吸收蛋白</th><th class="num">每天要吃（食物）</th><th class="num">每天花费</th></tr></thead>
         <tbody>
-          <tr><td data-l="方案">黄豆（干）</td><td class="num" data-l="吸收系数">0.85</td><td class="num" data-l="元/克可吸收蛋白">0.044</td><td class="num" data-l="每天要吃（食物）">376 g</td><td class="num" data-l="每天花费"><b>4.89 元</b></td></tr>
-          <tr><td data-l="方案">北豆腐</td><td class="num" data-l="吸收系数">0.75</td><td class="num" data-l="元/克可吸收蛋白">0.063</td><td class="num" data-l="每天要吃（食物）">1,224 g</td><td class="num" data-l="每天花费">7.10 元</td></tr>
-          <tr><td data-l="方案">鸡蛋（红皮，全蛋）</td><td class="num" data-l="吸收系数">1.13</td><td class="num" data-l="元/克可吸收蛋白">0.081</td><td class="num" data-l="每天要吃（食物）">880 g</td><td class="num" data-l="每天花费">9.08 元</td></tr>
-          <tr><td data-l="方案">鸡胸肉（去皮生）</td><td class="num" data-l="吸收系数">1.05</td><td class="num" data-l="元/克可吸收蛋白">0.098</td><td class="num" data-l="每天要吃（食物）">550 g</td><td class="num" data-l="每天花费">11.00 元</td></tr>
-          <tr><td data-l="方案">乳清蛋白粉 WPC80</td><td class="num" data-l="吸收系数">1.14</td><td class="num" data-l="元/克可吸收蛋白">0.154</td><td class="num" data-l="每天要吃（食物）">123 g</td><td class="num" data-l="每天花费">17.19 元</td></tr>
+          <tr><td data-l="方案">黄豆（干）</td><td class="num" data-l="吸收系数">0.85</td><td class="num" data-l="元/克可吸收蛋白">0.044</td><td class="num" data-l="每天要吃（食物）" data-fit-grams>376 g</td><td class="num" data-l="每天花费" data-fit-cost><b>4.89 元</b></td></tr>
+          <tr><td data-l="方案">北豆腐</td><td class="num" data-l="吸收系数">0.75</td><td class="num" data-l="元/克可吸收蛋白">0.063</td><td class="num" data-l="每天要吃（食物）" data-fit-grams>1,224 g</td><td class="num" data-l="每天花费" data-fit-cost>7.10 元</td></tr>
+          <tr><td data-l="方案">鸡蛋（红皮，全蛋）</td><td class="num" data-l="吸收系数">1.13</td><td class="num" data-l="元/克可吸收蛋白">0.081</td><td class="num" data-l="每天要吃（食物）" data-fit-grams>880 g</td><td class="num" data-l="每天花费" data-fit-cost>9.08 元</td></tr>
+          <tr><td data-l="方案">鸡胸肉（去皮生）</td><td class="num" data-l="吸收系数">1.05</td><td class="num" data-l="元/克可吸收蛋白">0.098</td><td class="num" data-l="每天要吃（食物）" data-fit-grams>550 g</td><td class="num" data-l="每天花费" data-fit-cost>11.00 元</td></tr>
+          <tr><td data-l="方案">乳清蛋白粉 WPC80</td><td class="num" data-l="吸收系数">1.14</td><td class="num" data-l="元/克可吸收蛋白">0.154</td><td class="num" data-l="每天要吃（食物）" data-fit-grams>123 g</td><td class="num" data-l="每天花费" data-fit-cost>17.19 元</td></tr>
       </tbody>
       </table>
     </div>
 
-    <div class="pull">折算吸收率之后，鸡蛋比鸡胸便宜——五块钱一斤的鸡蛋把「鸡胸肉是最便宜的优质蛋白」这句话掀了。<span>鸡蛋 0.081 元/克可吸收蛋白 vs 鸡胸 0.098，猪肝 0.060 甚至低于大豆分离蛋白 0.062。</span></div>
+    <div class="chart-card">
+      <div class="chart-head">
+        <div>
+          <p class="chart-title">体重每加 10 公斤，一天多花多少</p>
+          <p class="chart-sub">按 1.6 g 蛋白/kg 体重/天 · 斜率就是每公斤体重的每日成本</p>
+        </div>
+      </div>
+      <div id="chart-fitlines"></div>
+    </div>
+
+    <div class="pull">折算消化率之后，鸡蛋比鸡胸便宜——五块钱一斤的鸡蛋把「鸡胸肉是最便宜的优质蛋白」这句话掀了。<span>鸡蛋 0.081 元/克可吸收蛋白 vs 鸡胸 0.098，猪肝 0.060 甚至低于大豆分离蛋白 0.062。</span></div>
 
     <p><b>为什么豆腐没进前三。</b>豆腐常被当成「优质植物蛋白」，但按 DIAAS 它只有 0.64——低于豆浆的 0.88、腐竹的 0.86。老口径的「豆腐 PDCAAS 0.95」撑不起这个印象：一块北豆腐里能被利用的蛋白，只有标签数字的四分之三。这也是本页豆腐类普遍取 0.72–0.85 的原因，逐项标了置信度。</p>
+
+<p data-absorb-only><b>为什么没有「健身专用吸收率」。</b>这里乘的系数是<b>食物</b>的属性：蛋白在回肠末端被回收的比例，由氨基酸组成和消化率决定，跟你练不练、练了几年无关——换个人吃同一块鸡胸，系数不变。而「1.6 g/kg」是<b>人</b>的属性：训练刺激、目标、能量状态。两者相乘才是这一节的算法，所以不存在一张「健身版吸收率表」；谁给你一个「健身人群 +15%」的系数，那是编的。真正随训练状态变的是需要量、单餐亮氨酸阈值，以及练后那几小时略高的合成反应（一次性的、幅度小、个体差异大，没可靠到能进表）。表里这一列更准确的名字是<b>可吸收蛋白当量</b>，不是「吸收进肌肉的比例」。</p>
 
     <p><b>每餐还要看亮氨酸。</b>触发肌肉蛋白合成的不是「多少克蛋白」，而是其中 2.5–3.0 克亮氨酸：25 克乳清刚好 3.0 克，补到 5.0 克并不更强，3 克附近就是平台。换算成食物，乳清约 25–30 克、鸡蛋 30–35 克、大豆分离蛋白 32–40 克——<b>植物蛋白要吃到更多克数才凑得够</b>，这和吸收系数偏低是同一件事的两面。</p>
 
     <p><b>素食要加码。</b>以豆制品为主的结构，把目标量乘 1.1–1.3；以米面为主的结构要乘 1.5–2.0（小麦 DIAAS 0.44、大米 0.60）。互补是真管用的：FAO 2013 的示例里，小麦单吃 DIAAS 43，小麦 + 豌豆 + 全脂奶粉混合后升到 82。豆类配谷物同餐，是最便宜可行的补法。</p>
 
+<p><b>植物蛋白能不能增肌。</b>能，但「等克数」和「等总量」是两个结论。劣势是真的：亮氨酸密度低——乳清 10–12%、大豆 7.5–8%、小麦只有 6.8%，所以大豆分离蛋白要吃到 32–40 克才凑够 2.5–3 克亮氨酸，乳清 25–30 克就够；回肠消化率也低；谷物缺赖氨酸、豆类缺含硫氨基酸。但只要总量吃够，证据不支持「植物蛋白增不了肌」：Hevia-Larraín 等 2021 让 19 名习惯性素食者与 19 名杂食者做 12 周、每周两次的抗阻训练，两组蛋白统一吃到 <b>1.6 g/kg</b>（素食组靠植物性食物 + 大豆分离蛋白），腿瘦体重、肌纤维横截面积、腿举 1RM 的增幅<b>组间全无显著差异</b>（<a href="https://doi.org/10.1007/s40279-021-01434-9">Sports Med 2021</a>）；互补也真管用——FAO 的例子里小麦单吃 DIAAS 43，小麦 + 豌豆 + 全脂奶粉混合后升到 82。一句话：植物蛋白的代价是<b>要吃更多、最好混着吃</b>，不是「吃了没用」。</p>
+
     <p><b>减脂和老年不是同一套数。</b>热量缺口下的抗阻训练者按去脂体重需要 2.3–3.1 g/kg，折成体重约 <b>1.6–2.4 g/kg</b>，缺口越大、体脂越低越靠上限；只加蛋白不训练，保的是体重不是肌肉。65 岁以上按 PROT-AGE 分档：健康基线 1.0–1.2、有运动习惯 ≥1.2、患病或肌少症 1.2–1.5 g/kg，且每餐 25–30 克优质蛋白对冲「合成抵抗」。肾病 eGFR <30 未透析者不适用，需限蛋白。</p>
 
     <p><b>别掐表。</b>练后 30 分钟的「窗口」被夸大了：全天总量够的话，练后即刻与数小时后补差别很小。练前 2 小时内吃过含蛋白的正餐，窗口可顺延到 2 小时甚至更久；空腹训练就在练后 2 小时内补 0.4 g/kg。一天 3–4 餐的总量才是主线。蛋白粉也不是必需品——它买的是方便，单价按可吸收蛋白算比鸡胸还贵 56%。</p>
 
-    <p class="footnote">依据：Morton 2018 (<a href="https://doi.org/10.1136/bjsports-2017-097608">BJSM</a>)｜Schoenfeld &amp; Aragon 2018 (<a href="https://doi.org/10.1186/s12970-018-0215-1">JISSN</a>)｜Churchward-Venne 2014 (<a href="https://doi.org/10.3945/ajcn.113.068775">AJCN</a>)｜Helms 2014 (<a href="https://doi.org/10.1123/ijsnem.2013-0054">IJSNEM</a>)｜Bauer 2013 (<a href="https://doi.org/10.1016/j.jamda.2013.05.021">JAMDA</a>)｜Aragon &amp; Schoenfeld 2013 (<a href="https://doi.org/10.1186/1550-2783-10-5">JISSN</a>)｜FAO 2013 (<a href="https://www.fao.org/3/i3124e/i3124e.pdf">i3124e</a>)｜Herreman 2020 (<a href="https://doi.org/10.1002/fsn3.1809">Food Sci Nutr</a>)｜van den Berg 2022 (<a href="https://doi.org/10.3389/fnut.2022.1004754">Front Nutr</a>)。吸收系数逐项见仓库 <code>digest.json</code>；动物蛋白用未截断 PDCAAS（1.00–1.14），植物蛋白优先 DIAAS，避免出现「吸收率 144%」这类失真。</p>
+    <p class="footnote">依据：Morton 2018 (<a href="https://doi.org/10.1136/bjsports-2017-097608">BJSM</a>)｜Schoenfeld &amp; Aragon 2018 (<a href="https://doi.org/10.1186/s12970-018-0215-1">JISSN</a>)｜Churchward-Venne 2014 (<a href="https://doi.org/10.3945/ajcn.113.068775">AJCN</a>)｜Helms 2014 (<a href="https://doi.org/10.1123/ijsnem.2013-0054">IJSNEM</a>)｜Bauer 2013 (<a href="https://doi.org/10.1016/j.jamda.2013.05.021">JAMDA</a>)｜Aragon &amp; Schoenfeld 2013 (<a href="https://doi.org/10.1186/1550-2783-10-5">JISSN</a>)｜FAO 2013 (<a href="https://www.fao.org/3/i3124e/i3124e.pdf">i3124e</a>)｜Herreman 2020 (<a href="https://doi.org/10.1002/fsn3.1809">Food Sci Nutr</a>)｜van den Berg 2022 (<a href="https://doi.org/10.3389/fnut.2022.1004754">Front Nutr</a>)。吸收系数逐项见仓库 <code>digest.json</code>；动物蛋白用未截断 PDCAAS（1.00–1.14），植物蛋白优先 DIAAS，避免出现「消化率 144%」这类失真。</p>
     <!--FITNESS-END-->
   </section>
 
@@ -492,13 +517,13 @@ const state = { density: "t2", absorb: "none", weight: TARGET.kg, fam: new Set()
 const LIMIT = 26;
 
 const absorbOn = () => state.absorb !== "none";
-const absorbK = d => {
-  if (!absorbOn()) return 1;
+const digestK = d => {
   const byName = (DIGEST.by_name || {})[d.name];
   if (typeof byName === "number") return byName;
   const byGroup = (DIGEST.by_group || {})[d.g];
   return typeof byGroup === "number" ? byGroup : 1;
 };
+const absorbK = d => absorbOn() ? digestK(d) : 1;
 const effP = d => d.p * absorbK(d);
 const costPerGram = d => d.y / (d.p * 5 * d.e * absorbK(d));
 const fmtP = d => absorbOn() ? effP(d).toFixed(1) : String(d.p);
@@ -794,6 +819,7 @@ function renderCopy(){
   if (h) h.textContent = on ? "每克可吸收蛋白要花多少钱" : COPY_NONE.rankH2;
   if (l) l.textContent = on ? "把「每斤多少钱」除以「每斤含多少克可吸收蛋白」，就是每克可吸收蛋白的真实成本。数字越小越划算，它天然抹平了「一斤多少钱」的直觉误导。" : COPY_NONE.rankLede;
   if (f) f.textContent = on ? "把「每克可吸收蛋白多少钱」再往前推一步：按体重和目标蛋白量，折算成每天要买多少、花多少钱。" : COPY_NONE.fitnessLede;
+  document.querySelectorAll("[data-absorb-only]").forEach(el => { el.hidden = !on; });
   const m = $("#method-summary");
   if (m) m.innerHTML = on ? COPY_NONE.methodSummary.replace("每克蛋白质", "每克可吸收蛋白") : COPY_NONE.methodSummary;
 }
@@ -842,7 +868,7 @@ function renderAbsorbUI(){
   const note = $("#absorb-note");
   if (note){
     note.hidden = !on;
-    if (on) note.innerHTML = "已按 DIAAS 消化率折算，即真正进入血液的必需氨基酸比例。表中「蛋白」均指可吸收蛋白，成本 = 价格 ÷（蛋白含量 × 5 × 食部 × 吸收系数）。"
+    if (on) note.innerHTML = "已按 DIAAS 消化率折算，即真正进入血液的必需氨基酸比例。表中「蛋白」均指可吸收蛋白，成本 = 价格 ÷（蛋白含量 × 5 × 食部 × 系数）。系数是<b>食物</b>属性——同一块鸡胸谁吃都一样，与是否训练无关；它衡量「能被利用多少」，不是「吸收进肌肉多少」。"
       + (gymMode ? ` 健身模式按 ${TARGET.kg} kg、1.6 g 蛋白/kg 体重/天（增肌期推荐量）计算，每天目标 ${targetDaily()} g 可吸收蛋白；按每周 3–4 练估算，可自行换算。` : "");
   }
   const hint = $("#gym-hint");
@@ -896,6 +922,161 @@ function renderRankNote(rows){
   el.textContent = s;
 }
 
+/* ---------- 06 健身：两张图（固定按可吸收蛋白口径，避免无模式下与本节 4.89 元文案不一致） ---------- */
+const FIT_FOODS = [
+  ["黄豆（干）", "黄豆（干）"],
+  ["北豆腐（卤水，老豆腐）", "北豆腐"],
+  ["鸡蛋（红皮，全蛋）", "鸡蛋"],
+  ["鸡胸肉（去皮生）", "鸡胸肉"],
+  ["乳清蛋白粉（浓缩 WPC80）", "乳清 WPC80"]
+];
+function fitRows(){
+  return FIT_FOODS.map(([q, label]) => {
+    const d = DATA.find(x => x.name === q) || DATA.find(x => x.name.indexOf(q) === 0);
+    if (!d || !(d.p > 0) || !(d.y > 0)) return null;
+    const k = digestK(d);
+    const unit = d.y / (d.p * 5 * d.e * k);
+    return {
+      d, label, unit,
+      cost: unit * targetDaily(),
+      grams: targetDaily() / (d.p * k * d.e / 100)
+    };
+  }).filter(Boolean).sort((a, b) => a.cost - b.cost);
+}
+const fitYen = v => "¥" + v.toFixed(2);
+const fitGram = v => Math.round(v).toLocaleString("zh-CN") + " g";
+
+function renderFitnessCost(){
+  const host = $("#chart-fitcost");
+  if (!host) return;
+  const rows = fitRows();
+  const gEl = $("#fitcost-g"), xEl = $("#fitcost-x"), sub = $("#fitcost-sub");
+  const ratio = rows.length > 1 ? (rows[rows.length - 1].cost / rows[0].cost).toFixed(1) : "—";
+  if (gEl) gEl.textContent = targetDaily();
+  if (xEl) xEl.textContent = ratio;
+  if (sub) sub.textContent = `按当前体重 ${TARGET.kg} kg · 每天花费（元）· 括号内是每天要吃的食物克数`;
+  const copyG = $("#fit-copy-g"), copyG2 = $("#fit-copy-g2"), copyKg = $("#fit-copy-kg"), copyX = $("#fit-copy-x");
+  if (copyG) copyG.textContent = targetDaily();
+  if (copyG2) copyG2.textContent = targetDaily();
+  if (copyKg) copyKg.textContent = TARGET.kg;
+  if (copyX) copyX.textContent = ratio;
+  const tableG = $("#fit-table-g"), tableKg = $("#fit-table-kg");
+  if (tableG) tableG.textContent = targetDaily();
+  if (tableKg) tableKg.textContent = TARGET.kg;
+  const trs = document.querySelectorAll("#fit-cost-table tbody tr");
+  trs.forEach((tr, i) => {
+    const r = rows[i];
+    if (!r) return;
+    const gc = tr.querySelector("[data-fit-grams]"), cc = tr.querySelector("[data-fit-cost]");
+    if (gc) gc.textContent = fitGram(r.grams);
+    if (cc) cc.innerHTML = (i === 0 ? "<b>" : "") + r.cost.toFixed(2) + " 元" + (i === 0 ? "</b>" : "");
+  });
+  if (!rows.length){ host.innerHTML = ""; return; }
+
+  const W = Math.max(280, Math.round(host.clientWidth || 720));
+  const narrow = W < 520;
+  const rowH = narrow ? 36 : 38, barH = 14;
+  const M = {t: 14, r: narrow ? 82 : 92, b: 34, l: narrow ? 84 : 106};
+  const H = M.t + rows.length * rowH + M.b;
+  const plotW = W - M.l - M.r;
+  const max = Math.max(...rows.map(r => r.cost));
+  const xMax = (max * 1.08) || 1;
+  const xf = v => M.l + plotW * v / xMax;
+  const valueFont = narrow ? 11 : 12.5;
+  const step = xMax <= 8 ? 2 : 5;
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="同样 ${targetDaily()} 克可吸收蛋白，五种买法的每天花费">`;
+  s += `<title>同样 ${targetDaily()} 克可吸收蛋白，五种买法的每天花费（${TARGET.kg} kg）</title>`;
+
+  for (let v = 0; v <= xMax + 1e-6; v += step){
+    const x = xf(v);
+    s += `<line x1="${x.toFixed(1)}" y1="${M.t - 2}" x2="${x.toFixed(1)}" y2="${M.t + rows.length * rowH}" stroke="var(--rule)" stroke-width="1" stroke-dasharray="2 4"/>`;
+    s += `<text x="${x.toFixed(1)}" y="${H - 10}" text-anchor="middle" style="font-size:10.5px;fill:var(--muted)">¥${v}</text>`;
+  }
+
+  rows.forEach((r, i) => {
+    const cy = M.t + i * rowH + rowH / 2;
+    const bw = plotW * r.cost / xMax;
+    const color = FAM_COLOR[famOf(r.d.g)];
+    s += `<text x="${M.l - 8}" y="${cy + 4}" text-anchor="end" style="font-size:13px;fill:var(--ink)">${r.label}</text>`;
+    s += `<text x="${M.l - 8}" y="${cy + 19}" text-anchor="end" style="font-size:10.5px;fill:var(--muted);font-variant-numeric:tabular-nums">（${fitGram(r.grams)}）</text>`;
+    s += `<rect x="${M.l}" y="${cy - barH / 2}" width="${Math.max(1, bw).toFixed(1)}" height="${barH}" rx="2" fill="${color}"/>`;
+    s += `<text x="${(M.l + bw + 6).toFixed(1)}" y="${cy + 4}" text-anchor="start" style="font-size:${valueFont}px;fill:var(--ink);font-variant-numeric:tabular-nums;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round">${fitYen(r.cost)}/天</text>`;
+  });
+
+  s += `</svg>`;
+  host.innerHTML = s;
+}
+
+function renderFitnessLines(){
+  const host = $("#chart-fitlines");
+  if (!host) return;
+  const rows = fitRows();
+  if (!rows.length){ host.innerHTML = ""; return; }
+
+  const W = Math.max(280, Math.round(host.clientWidth || 720));
+  const narrow = W < 520;
+  const H = narrow ? 270 : 320;
+  const M = {t: 34, r: narrow ? 84 : 100, b: 40, l: narrow ? 42 : 50};
+  const plotW = W - M.l - M.r, plotH = H - M.t - M.b;
+  const maxUnit = Math.max(...rows.map(r => r.unit));
+  const yMax = (maxUnit * 1.6 * 90 * 1.08) || 1;
+  const xf = kg => M.l + plotW * (kg - 50) / 40;
+  const yf = v => M.t + plotH * (1 - v / yMax);
+  const labelFont = narrow ? 10.5 : 11.5;
+  const kg = Math.min(90, Math.max(50, TARGET.kg));
+
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="体重从 50 到 90 公斤，五种食物的每天花费">`;
+  s += `<title>体重从 50 到 90 公斤，五种食物的每天花费（当前 ${TARGET.kg} kg）</title>`;
+
+  const yStep = yMax <= 9 ? 2 : 5;
+  for (let v = 0; v <= yMax + 1e-6; v += yStep){
+    const y = yf(v);
+    s += `<line x1="${M.l}" y1="${y.toFixed(1)}" x2="${M.l + plotW}" y2="${y.toFixed(1)}" stroke="var(--rule)" stroke-width="1" stroke-dasharray="2 4"/>`;
+    s += `<text x="${M.l - 6}" y="${(y + 4).toFixed(1)}" text-anchor="end" style="font-size:10.5px;fill:var(--muted)">${v}</text>`;
+  }
+  s += `<text x="12" y="${M.t + plotH / 2}" text-anchor="middle" transform="rotate(-90 12 ${M.t + plotH / 2})" style="font-size:10.5px;fill:var(--muted)">元 / 天</text>`;
+
+  const ticks = narrow ? [50, 70, 90] : [50, 60, 70, 80, 90];
+  ticks.forEach(t => {
+    s += `<text x="${xf(t).toFixed(1)}" y="${H - 12}" text-anchor="middle" style="font-size:10.5px;fill:var(--muted)">${t}</text>`;
+  });
+
+  rows.forEach(r => {
+    s += `<path d="M${xf(50).toFixed(1)} ${yf(r.unit * 1.6 * 50).toFixed(1)} L${xf(90).toFixed(1)} ${yf(r.unit * 1.6 * 90).toFixed(1)}" fill="none" stroke="${FAM_COLOR[famOf(r.d.g)]}" stroke-width="1.75" stroke-linecap="round"/>`;
+  });
+
+  const cx = xf(kg);
+  s += `<line x1="${cx.toFixed(1)}" y1="${M.t}" x2="${cx.toFixed(1)}" y2="${H - M.b}" stroke="var(--ink)" stroke-width="1" stroke-dasharray="3 4" opacity=".55"/>`;
+  const topAnchor = cx < M.l + 28 ? "start" : cx > M.l + plotW - 28 ? "end" : "middle";
+  s += `<text x="${cx.toFixed(1)}" y="${M.t - 10}" text-anchor="${topAnchor}" style="font-size:11px;fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3px">${TARGET.kg} kg</text>`;
+
+  rows.forEach(r => {
+    s += `<circle cx="${cx.toFixed(1)}" cy="${yf(r.unit * 1.6 * kg).toFixed(1)}" r="3.5" fill="${FAM_COLOR[famOf(r.d.g)]}" stroke="#fff" stroke-width="1"/>`;
+  });
+
+  const cheap = rows[0], expensive = rows[rows.length - 1];
+  [[cheap, "cheap"], [expensive, "expensive"]].forEach(([r, kind]) => {
+    const cy = yf(r.unit * 1.6 * kg);
+    let dy = kind === "cheap" ? 15 : -9;
+    if (kind === "cheap" && cy > H - M.b - 20) dy = -9;
+    if (kind === "expensive" && cy < M.t + 18) dy = 15;
+    s += `<text x="${cx.toFixed(1)}" y="${(cy + dy).toFixed(1)}" text-anchor="middle" style="font-size:10.5px;fill:var(--ink);font-variant-numeric:tabular-nums;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round">${fitYen(r.unit * 1.6 * kg)}</text>`;
+  });
+
+  const ends = rows.map(r => ({r, y: yf(r.unit * 1.6 * 90)})).sort((a, b) => a.y - b.y);
+  let prev = -Infinity;
+  ends.forEach(o => { o.ly = Math.max(o.y, prev + 13); prev = o.ly; });
+  const over = ends[ends.length - 1].ly - (H - M.b + 2);
+  if (over > 0) ends.forEach(o => { o.ly -= over; });
+  ends.forEach(o => {
+    s += `<text x="${M.l + plotW + 8}" y="${(o.ly + 4).toFixed(1)}" text-anchor="start" style="font-size:${labelFont}px;fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round">${o.r.label}</text>`;
+  });
+
+  s += `</svg>`;
+  host.innerHTML = s;
+}
+
 function render(){
   const rows = visible();
   renderControls();
@@ -903,10 +1084,30 @@ function render(){
   renderRanking(rows);
   renderScatter(rows);
   renderTable(rows);
+  renderFitnessCost();
+  renderFitnessLines();
 }
 
 bindWeight();
 render();
+
+let fitResizeTimer;
+const fitRelayout = () => {
+  clearTimeout(fitResizeTimer);
+  fitResizeTimer = setTimeout(() => { renderFitnessCost(); renderFitnessLines(); }, 120);
+};
+window.addEventListener("resize", fitRelayout);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) fitRelayout(); });
+
+// 容器宽度变化（换设备/旋转/筛选条换行都会改宽度，但不一定触发 window.resize）时重画，
+// 否则 SVG 会留着旧宽度、被 CSS 缩到容器里，字跟着缩小。
+if (typeof ResizeObserver !== "undefined") {
+  const ro = new ResizeObserver(fitRelayout);
+  ["#chart-fitcost", "#chart-fitlines"].forEach(sel => {
+    const el = document.querySelector(sel);
+    if (el) ro.observe(el);
+  });
+}
 
 </script>
 <script>
