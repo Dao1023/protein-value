@@ -60,6 +60,10 @@
   .grid-line{stroke:var(--rule);stroke-width:1}
   .axis text{font-size:11.5px;fill:var(--muted)}
   .footnote{font-size:12.5px;color:var(--muted);line-height:1.5;margin:12px 0 0;padding-top:10px;border-top:1px solid var(--rule)}
+  .absorb-note{color:#4a4037;background:#fff8ea;border-top:1px solid var(--claret);border-left:3px solid var(--claret);padding:10px 12px;max-width:52em}
+  .gym-hint{margin:14px 0 0;padding:11px 14px;border:1px solid var(--claret);background:#fff;font-size:14px;max-width:52em}
+  .gym-hint b{font-variant-numeric:tabular-nums}
+  #fitness{scroll-margin-top:88px}
 
   .pull{border-left:3px solid var(--claret);padding:6px 0 6px 20px;margin:30px 0;
     font-family:Georgia,"Songti SC",serif;font-size:21px;line-height:1.45;color:#211f1b}
@@ -74,6 +78,8 @@
   td:nth-child(2),td:first-child{white-space:nowrap}
   .cat-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px}
   .scroll{overflow-x:auto}
+  .scroll.gym th{white-space:normal}
+  .scroll.gym th,.scroll.gym td{padding-left:6px;padding-right:6px}
 
   .filterbar{position:fixed;top:0;left:0;right:0;z-index:60;background:var(--paper);
     padding:0;border-bottom:0}
@@ -89,6 +95,15 @@
   .seg{display:inline-flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden;background:#fff;flex:0 0 auto}
   .seg button{font:inherit;font-size:13px;padding:7px 13px;border:0;background:transparent;color:#3a362e;cursor:pointer}
   .seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .filterbar .wrap{max-width:1180px}
+  .wt{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:#3a362e;flex:0 0 auto;cursor:text}
+  .wt[hidden]{display:none}
+  .wt input{width:56px;padding:6px 4px;border:1px solid var(--rule);border-radius:999px;background:#fff;
+    font:inherit;font-size:13px;text-align:center;font-variant-numeric:tabular-nums;color:var(--ink);
+    appearance:textfield;-moz-appearance:textfield}
+  .wt input:focus{outline:none;border-color:var(--ink)}
+  .wt input::-webkit-outer-spin-button,.wt input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .wt .u{color:var(--muted)}
   .count{font-size:13px;color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums;flex:0 0 auto;white-space:nowrap}
   .more{font:inherit;font-size:13px;margin-top:10px;padding:8px 14px;border:1px dashed var(--rule);background:transparent;color:var(--blue);cursor:pointer;width:100%;border-radius:4px}
   .more:hover{border-color:var(--blue)}
@@ -121,7 +136,7 @@
   <div class="hero">
     <div class="kicker"><span id="kicker-n">101</span> 种食物品种的蛋白质账本</div>
     <h1>买蛋白质，<br>最划算的不是鸡胸肉，是<em>黄豆</em></h1>
-    <p class="standfirst">
+    <p class="standfirst" id="hero-lede">
       一斤黄豆 6.5 元，含 175 克蛋白质，折下来每克 0.037 元。同样一斤活扇贝 79 元，剥出来的可食部分只含 19 克蛋白质，
       每克 4.07 元——为了同样的蛋白质，要多付 110 倍的钱。蛋白质含量和价格并不是一回事，
       下面把它们放在同一把尺子上量：算的都是真正吃到嘴里的那部分，带壳、带骨、带荚的先折可食部。
@@ -130,11 +145,13 @@
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="n">0.037<small> 元</small></div><div class="l">黄豆每克蛋白质，全表最低</div></div>
-    <div class="stat"><div class="n">4.07<small> 元</small></div><div class="l">活扇贝每克蛋白质，全表最高</div></div>
-    <div class="stat"><div class="n">110<small>×</small></div><div class="l">两者差了 110 倍</div></div>
-    <div class="stat"><div class="n">90<small> g</small></div><div class="l">大豆分离蛋白粉每 100 克含蛋白质，全表最高</div></div>
+    <div class="stat" id="stat-1"><div class="n">0.037<small> 元</small></div><div class="l">黄豆每克蛋白质，全表最低</div></div>
+    <div class="stat" id="stat-2"><div class="n">4.07<small> 元</small></div><div class="l">活扇贝每克蛋白质，全表最高</div></div>
+    <div class="stat" id="stat-3"><div class="n">110<small>×</small></div><div class="l">两者差了 110 倍</div></div>
+    <div class="stat" id="stat-4"><div class="n">90<small> g</small></div><div class="l">大豆分离蛋白粉每 100 克含蛋白质，全表最高</div></div>
   </div>
+  <p class="footnote absorb-note" id="absorb-note" hidden></p>
+  <div class="gym-hint" id="gym-hint" hidden></div>
 
   <!-- 吸顶筛选条：独立于章节，全页滚动都保持在视口顶端 -->
   <div class="filterbar">
@@ -146,6 +163,15 @@
         <button data-d="t2" aria-pressed="true">日常</button>
         <button data-d="all" aria-pressed="false">详细</button>
       </div>
+      <div class="seg" id="absorb" role="group" aria-label="蛋白吸收折算">
+        <button data-a="none" aria-pressed="true" title="不折算，按粗蛋白计算">无</button>
+        <button data-a="daily" aria-pressed="false" title="按 DIAAS 折算为可吸收蛋白">日常</button>
+        <button data-a="gym" aria-pressed="false" title="折算可吸收蛋白，并计算每天要吃多少">健身</button>
+      </div>
+      <label class="wt" id="wt-wrap" hidden title="按 1.6 g 蛋白/kg 体重/天（增肌期推荐量）">
+        <input type="number" id="weight" min="30" max="200" step="1" value="70" inputmode="numeric" aria-label="体重（kg）">
+        <span class="u">kg</span>
+      </label>
       <div class="count" id="count"></div>
     </div>
     </div>
@@ -154,19 +180,19 @@
   <!-- ========== 1. 排名 ========== -->
   <section>
     <div class="sec-label">01 · 排名</div>
-    <h2>每克蛋白质要花多少钱</h2>
-    <p class="lede">把「每斤多少钱」除以「每斤含多少克蛋白质」，就是每克蛋白质的真实成本。数字越小越划算，它天然抹平了「一斤多少钱」的直觉误导。</p>
+    <h2 id="rank-h2">每克蛋白质要花多少钱</h2>
+    <p class="lede" id="rank-lede">把「每斤多少钱」除以「每斤含多少克蛋白质」，就是每克蛋白质的真实成本。数字越小越划算，它天然抹平了「一斤多少钱」的直觉误导。</p>
 
     <div class="chart-card">
       <div class="chart-head">
         <div>
-          <p class="chart-title">每克蛋白质价格（元）</p>
-          <p class="chart-sub">横轴越短越划算 · 对数刻度，跨 110 倍 · <span id="rank-n">101</span> 种食物</p>
+          <p class="chart-title" id="rank-title">每克蛋白质价格（元）</p>
+          <p class="chart-sub">横轴越短越划算 · 对数刻度，跨 <span id="rank-ratio">110</span> 倍 · <span id="rank-n">101</span> 种食物</p>
         </div>
       </div>
       <div class="legend" id="legend"></div>
       <div id="chart-ranking" style="margin-top:6px"></div>
-      <p class="footnote">豆制品包揽前五（黄豆、花生、老豆腐、豆腐干、腐竹）。生大米、燕麦片、鸡蛋、馒头都挤在 0.10 元一线，鸡蛋 0.103 与干挂面 0.119 相差不到 15%——因为鸡蛋 74% 是水，而挂面只有 12%。</p>
+      <p class="footnote" id="rank-note">豆制品包揽前五（黄豆、花生、老豆腐、豆腐干、腐竹）。生大米、燕麦片、鸡蛋、馒头都挤在 0.10 元一线，鸡蛋 0.103 与干挂面 0.119 相差不到 15%——因为鸡蛋 74% 是水，而挂面只有 12%。</p>
     </div>
   </section>
 
@@ -221,8 +247,8 @@
     <h2>全部品种，从最划算到最贵</h2>
     <div class="scroll">
       <table id="tbl">
-        <caption>价格为中国大陆商超/菜场常见零售价（元/斤，2026-11）；蛋白质为每 100 克可食部</caption>
-        <thead>
+        <caption id="tbl-caption">价格为中国大陆商超/菜场常见零售价（元/斤，2026-11）；蛋白质为每 100 克可食部</caption>
+        <thead id="tbl-head">
           <tr><th>食物</th><th>类别</th><th class="num">蛋白 g/100g</th><th class="num">食部</th><th class="num">元/斤</th><th class="num">元/克蛋白</th><th>口径与规格</th></tr>
         </thead>
         <tbody></tbody>
@@ -242,7 +268,62 @@
     <p><b>补剂单独成组</b>：乳清蛋白粉、分离蛋白粉按 5 磅装电商常见价折算，不属日常食材，图里可单独筛出。</p>
     <p><b>已知局限</b>：① 价格随城市、季节、规格波动极大（三文鱼冰鲜/冻品差 2 倍，虾按头数差 1.5 倍），渠道误差约 10–20%；表中约四成价格是新发地当日批发价 ×1.4–1.5 推算的零售价，note 列逐行标了「估」。② 只算粗蛋白，没算氨基酸评分与消化率——按 DIAAS 修正（鸡蛋约 1.1、小麦约 0.5），鸡蛋其实比干挂面便宜一半。③ 没考虑烹饪损耗与时间成本。</p>
     <p><b>关于主食</b>：谷物与豆制品统一按干重配干价。「米饭」因此换成生大米（3.5 元/斤）——熟饭 2.6g/100g 对应生米 7.4g/100g，两种读法相差近三倍，必须二选一。</p>
-    <p><b>一句话</b>：以「每克蛋白质最便宜」为目标，主力应该是<b>豆制品、鸡蛋、鸡胸肉</b>；牛奶和三文鱼不是用来买蛋白质的，它们卖的是钙、口感和那点 omega-3。</p>
+    <p id="method-summary"><b>一句话</b>：以「每克蛋白质最便宜」为目标，主力应该是<b>豆制品、鸡蛋、鸡胸肉</b>；牛奶和三文鱼不是用来买蛋白质的，它们卖的是钙、口感和那点 omega-3。</p>
+  </section>
+
+  <!-- ========== 6. 健身 ========== -->
+  <section id="fitness">
+    <div class="sec-label">06 · 健身</div>
+    <h2>练的人，一天到底要吃多少</h2>
+    <p class="lede" id="fitness-lede">把「每克蛋白多少钱」再往前推一步：按体重和目标蛋白量，折算成每天要买多少、花多少钱。</p>
+    <!--FITNESS-START-->
+    <p><b>先定总量。</b>增肌期 1.6 克蛋白/公斤体重/天是收益拐点，不是上限：Morton 等对 49 项 RCT（1863 人）做两相断点回归，拐点落在 <b>1.62 g/kg</b>；再往上加，抗阻训练带来的去脂体重增长不再显著。实操区间取 1.6–2.2，训练年限长或热量缺口大时往 2.0–2.2 靠。70 公斤的人就是 <b>112 克</b>，按每餐 0.4 g/kg 摊到 4 餐。</p>
+
+    <div class="scroll">
+      <table>
+        <caption>按体重换算的每日目标（1.6 g/kg 口径，可吸收蛋白当量）</caption>
+        <thead><tr><th>体重</th><th class="num">每天需可吸收蛋白</th><th class="num">每餐（×4）</th><th class="num">黄豆方案每天花费</th><th class="num">鸡胸方案每天花费</th></tr></thead>
+        <tbody>
+          <tr><td>50 kg</td><td class="num">80 g</td><td class="num">20 g</td><td class="num">3.49 元</td><td class="num">7.86 元</td></tr>
+          <tr><td>60 kg</td><td class="num">96 g</td><td class="num">24 g</td><td class="num">4.19 元</td><td class="num">9.43 元</td></tr>
+          <tr><td><b>70 kg</b></td><td class="num">112 g</td><td class="num">28 g</td><td class="num">4.89 元</td><td class="num">11.00 元</td></tr>
+          <tr><td>80 kg</td><td class="num">128 g</td><td class="num">32 g</td><td class="num">5.59 元</td><td class="num">12.57 元</td></tr>
+          <tr><td>90 kg</td><td class="num">144 g</td><td class="num">36 g</td><td class="num">6.29 元</td><td class="num">14.14 元</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="footnote" style="border-top:none;padding-top:0;margin-top:4px">花费 = 目标可吸收蛋白 ÷ 该食物的吸收系数 × 它的元/克蛋白（黄豆 0.85 与 0.0436，鸡胸 1.05 与 0.0982，均取自本表 102 行数据）。</p>
+
+    <p style="margin-top:22px"><b>同一个 112 克，吃法不同差 3.5 倍。</b>下表全部按 70 公斤、每天 112 克可吸收蛋白算；「每天要吃」那列是折算吸收率之后的<b>食物克数</b>——黄豆、豆腐要吃一大碗，鸡蛋和鸡胸不到一斤。</p>
+
+    <div class="scroll">
+      <table>
+        <caption>凑够 112 克可吸收蛋白，五种买法的成本（70 kg）</caption>
+        <thead><tr><th>方案</th><th class="num">吸收系数</th><th class="num">元/克可吸收蛋白</th><th class="num">每天要吃（食物）</th><th class="num">每天花费</th></tr></thead>
+        <tbody>
+          <tr><td>黄豆（干）</td><td class="num">0.85</td><td class="num">0.044</td><td class="num">376 g</td><td class="num"><b>4.89 元</b></td></tr>
+          <tr><td>北豆腐</td><td class="num">0.75</td><td class="num">0.063</td><td class="num">1,224 g</td><td class="num">7.09 元</td></tr>
+          <tr><td>鸡蛋（红皮，全蛋）</td><td class="num">1.13</td><td class="num">0.081</td><td class="num">880 g</td><td class="num">9.08 元</td></tr>
+          <tr><td>鸡胸肉（去皮生）</td><td class="num">1.05</td><td class="num">0.098</td><td class="num">523 g</td><td class="num">11.00 元</td></tr>
+          <tr><td>乳清蛋白粉 WPC80</td><td class="num">1.14</td><td class="num">0.153</td><td class="num">123 g</td><td class="num">17.19 元</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pull">折算吸收率之后，鸡蛋比鸡胸便宜——五块钱一斤的鸡蛋把「鸡胸肉是最便宜的优质蛋白」这句话掀了。<span>鸡蛋 0.081 元/克可吸收蛋白 vs 鸡胸 0.098，猪肝 0.060 甚至低于大豆分离蛋白 0.062。</span></div>
+
+    <p><b>为什么豆腐没进前三。</b>豆腐常被当成「优质植物蛋白」，但按 DIAAS 它只有 0.64——低于豆浆的 0.88、腐竹的 0.86。老口径的「豆腐 PDCAAS 0.95」撑不起这个印象：一块北豆腐里能被利用的蛋白，只有标签数字的四分之三。这也是本页豆腐类普遍取 0.72–0.85 的原因，逐项标了置信度。</p>
+
+    <p><b>每餐还要看亮氨酸。</b>触发肌肉蛋白合成的不是「多少克蛋白」，而是其中 2.5–3.0 克亮氨酸：25 克乳清刚好 3.0 克，补到 5.0 克并不更强，3 克附近就是平台。换算成食物，乳清约 25–30 克、鸡蛋 30–35 克、大豆分离蛋白 32–40 克——<b>植物蛋白要吃到更多克数才凑得够</b>，这和吸收系数偏低是同一件事的两面。</p>
+
+    <p><b>素食要加码。</b>以豆制品为主的结构，把目标量乘 1.1–1.3；以米面为主的结构要乘 1.5–2.0（小麦 DIAAS 0.44、大米 0.60）。互补是真管用的：FAO 2013 的示例里，小麦单吃 DIAAS 43，小麦 + 豌豆 + 全脂奶粉混合后升到 82。豆类配谷物同餐，是最便宜可行的补法。</p>
+
+    <p><b>减脂和老年不是同一套数。</b>热量缺口下的抗阻训练者按去脂体重需要 2.3–3.1 g/kg，折成体重约 <b>1.6–2.4 g/kg</b>，缺口越大、体脂越低越靠上限；只加蛋白不训练，保的是体重不是肌肉。65 岁以上按 PROT-AGE 分档：健康基线 1.0–1.2、有运动习惯 ≥1.2、患病或肌少症 1.2–1.5 g/kg，且每餐 25–30 克优质蛋白对冲「合成抵抗」。肾病 eGFR <30 未透析者不适用，需限蛋白。</p>
+
+    <p><b>别掐表。</b>练后 30 分钟的「窗口」被夸大了：全天总量够的话，练后即刻与数小时后补差别很小。练前 2 小时内吃过含蛋白的正餐，窗口可顺延到 2 小时甚至更久；空腹训练就在练后 2 小时内补 0.4 g/kg。一天 3–4 餐的总量才是主线。蛋白粉也不是必需品——它买的是方便，单价按可吸收蛋白算比鸡胸还贵 56%。</p>
+
+    <p class="footnote">依据：Morton 2018 (<a href="https://doi.org/10.1136/bjsports-2017-097608">BJSM</a>)｜Schoenfeld &amp; Aragon 2018 (<a href="https://doi.org/10.1186/s12970-018-0215-1">JISSN</a>)｜Churchward-Venne 2014 (<a href="https://doi.org/10.3945/ajcn.113.068775">AJCN</a>)｜Helms 2014 (<a href="https://doi.org/10.1123/ijsnem.2013-0054">IJSNEM</a>)｜Bauer 2013 (<a href="https://doi.org/10.1016/j.jamda.2013.05.021">JAMDA</a>)｜Aragon &amp; Schoenfeld 2013 (<a href="https://doi.org/10.1186/1550-2783-10-5">JISSN</a>)｜FAO 2013 (<a href="https://www.fao.org/3/i3124e/i3124e.pdf">i3124e</a>)｜Herreman 2020 (<a href="https://doi.org/10.1002/fsn3.1809">Food Sci Nutr</a>)｜van den Berg 2022 (<a href="https://doi.org/10.3389/fnut.2022.1004754">Front Nutr</a>)。吸收系数逐项见仓库 <code>digest.json</code>；动物蛋白用未截断 PDCAAS（1.00–1.14），植物蛋白优先 DIAAS，避免出现「吸收率 144%」这类失真。</p>
+    <!--FITNESS-END-->
   </section>
 
   <footer>
@@ -374,11 +455,45 @@ const DATA = [
 ];
 /*DATA-END*/
 
+/*DIGEST-START*/
+const DIGEST = {"by_name": {"鸡蛋（红皮，全蛋）": 1.13, "鸡蛋（土鸡蛋，全蛋）": 1.13, "蛋清（鸡蛋清）": 1.1, "纯牛奶（全脂）": 1.14, "牛奶（脱脂）": 1.14, "奶粉（全脂）": 1.14, "酸奶（普通含糖）": 1.14, "希腊酸奶（过滤型）": 1.14, "奶酪（切达）": 1.1, "乳清蛋白粉（浓缩 WPC80）": 1.14, "乳清蛋白粉（分离 WPI90）": 1.14, "酪蛋白（缓释）": 1.0, "大豆分离蛋白粉": 0.9, "黄豆（干）": 0.85, "黑豆（干）": 0.85, "青豆（干，青大豆）": 0.85, "红豆（赤小豆，干）": 0.78, "北豆腐（卤水，老豆腐）": 0.75, "南豆腐（石膏，水豆腐）": 0.75, "内酯豆腐（盒装嫩豆腐）": 0.72, "豆腐干（白干，散装）": 0.82, "香干（卤制豆干）": 0.82, "千张（百页，薄豆皮）": 0.85, "豆皮（干豆腐皮）": 0.85, "豆腐丝（干，袋装）": 0.85, "腐竹（干，袋装）": 0.86, "素鸡（豆制卷）": 0.82, "油豆腐（油炸豆泡）": 0.8, "豆腐泡（鲜豆泡）": 0.8, "豆腐乳（红方，瓶装）": 0.85, "豆浆（无糖，现磨）": 0.88, "豆奶（豆乳，含糖）": 0.85, "鹰嘴豆（干）": 0.71, "豌豆（鲜，带荚）": 0.72, "小麦粉（标准粉，干重）": 0.44, "全麦粉（干重）": 0.43, "大米（生）": 0.6, "籼米（标准，干重）": 0.6, "粳米（标一，干重）": 0.6, "糯米（江米，干重）": 0.58, "糙米（生，干重）": 0.55, "黑米（生，干重）": 0.55, "玉米面（黄，干重）": 0.48, "玉米（黄，干）": 0.48, "高粱米（干重）": 0.3, "荞麦（干重）": 0.57, "燕麦片（纯，干）": 0.62, "馒头（标准粉）": 0.45, "挂面（鸡蛋面干）": 0.45, "干挂面": 0.45, "意大利面（干）": 0.45, "全麦面包（熟重）": 0.4, "白面包（均值，熟重）": 0.4, "方便面（油炸，含调料）": 0.38, "米粉（干，细）": 0.6, "土豆（生）": 0.75, "花生仁（生，去壳）": 0.55}, "by_group": {"蛋": 1.13, "奶制品": 1.14, "畜肉": 1.05, "禽肉": 1.05, "鱼": 1.05, "虾蟹贝": 1.0, "豆制品": 0.9, "豆类": 0.8, "谷物": 0.55, "面制品": 0.5, "薯类": 0.55, "坚果种子": 0.65, "补剂": 1.05}, "meta": {"version": "1.0", "generated": "2026-11-17", "data_file": "data.json", "methodology": "吸收率 = 可被人体利用的蛋白质比例。优先 DIAAS（FAO 2013 推荐，真回肠消化率×氨基酸评分，不截断 100%）；无 DIAAS 时用 PDCAAS；两者分歧 >0.15 时取中位并标 low confidence。动物蛋白统一采用未截断 PDCAAS 口径（1.00–1.14），因为成人 DIAAS 普遍为 1.2–1.4，直接放进 C 端页面会得到「吸收率 144%」的反直觉数字；DIAAS 值保留在 meta.ranges 与 sources 中备查。", "policy": {"diaas_first": true, "truncate_at_1": false, "animal_protein_cap": 1.14, "conflict_rule": "DIAAS 与 PDCAAS 相差 >0.15 时取中位，confidence=low"}, "coverage": {"total_items": 102, "by_name": 57, "by_group_fallback": 45}, "basis_legend": {"diaas": "可消化必需氨基酸评分（FAO 2013），真回肠消化率", "pdcaas": "蛋白质消化率校正氨基酸评分（FAO/WHO 1991），本表用未截断值", "diaas/pdcaas 中位": "两种口径分歧过大，取中位，置信度低"}, "by_name_basis": {"鸡蛋（红皮，全蛋）": "pdcaas", "鸡蛋（土鸡蛋，全蛋）": "pdcaas", "蛋清（鸡蛋清）": "pdcaas", "纯牛奶（全脂）": "pdcaas", "牛奶（脱脂）": "pdcaas", "奶粉（全脂）": "pdcaas", "酸奶（普通含糖）": "pdcaas", "希腊酸奶（过滤型）": "pdcaas", "奶酪（切达）": "pdcaas", "乳清蛋白粉（浓缩 WPC80）": "pdcaas", "乳清蛋白粉（分离 WPI90）": "pdcaas", "酪蛋白（缓释）": "pdcaas", "大豆分离蛋白粉": "diaas", "黄豆（干）": "diaas", "黑豆（干）": "diaas", "青豆（干，青大豆）": "diaas", "红豆（赤小豆，干）": "diaas", "北豆腐（卤水，老豆腐）": "diaas/pdcaas 中位", "南豆腐（石膏，水豆腐）": "diaas/pdcaas 中位", "内酯豆腐（盒装嫩豆腐）": "diaas/pdcaas 中位", "豆腐干（白干，散装）": "diaas", "香干（卤制豆干）": "diaas", "千张（百页，薄豆皮）": "diaas", "豆皮（干豆腐皮）": "diaas", "豆腐丝（干，袋装）": "diaas", "腐竹（干，袋装）": "diaas", "素鸡（豆制卷）": "diaas", "油豆腐（油炸豆泡）": "diaas", "豆腐泡（鲜豆泡）": "diaas", "豆腐乳（红方，瓶装）": "diaas", "豆浆（无糖，现磨）": "diaas", "豆奶（豆乳，含糖）": "diaas", "鹰嘴豆（干）": "diaas", "豌豆（鲜，带荚）": "diaas", "小麦粉（标准粉，干重）": "diaas", "全麦粉（干重）": "diaas", "大米（生）": "diaas", "籼米（标准，干重）": "diaas", "粳米（标一，干重）": "diaas", "糯米（江米，干重）": "diaas", "糙米（生，干重）": "diaas", "黑米（生，干重）": "diaas", "玉米面（黄，干重）": "diaas", "玉米（黄，干）": "diaas", "高粱米（干重）": "diaas", "荞麦（干重）": "diaas", "燕麦片（纯，干）": "diaas", "馒头（标准粉）": "diaas", "挂面（鸡蛋面干）": "diaas", "干挂面": "diaas", "意大利面（干）": "diaas", "全麦面包（熟重）": "diaas", "白面包（均值，熟重）": "diaas", "方便面（油炸，含调料）": "diaas", "米粉（干，细）": "diaas", "土豆（生）": "diaas", "花生仁（生，去壳）": "diaas"}, "confidence": {"鸡蛋（红皮，全蛋）": "high", "鸡蛋（土鸡蛋，全蛋）": "high", "蛋清（鸡蛋清）": "medium", "纯牛奶（全脂）": "high", "牛奶（脱脂）": "high", "奶粉（全脂）": "high", "酸奶（普通含糖）": "high", "希腊酸奶（过滤型）": "medium", "奶酪（切达）": "medium", "乳清蛋白粉（浓缩 WPC80）": "high", "乳清蛋白粉（分离 WPI90）": "high", "酪蛋白（缓释）": "high", "大豆分离蛋白粉": "high", "黄豆（干）": "high", "黑豆（干）": "medium", "青豆（干，青大豆）": "medium", "红豆（赤小豆，干）": "medium", "北豆腐（卤水，老豆腐）": "low", "南豆腐（石膏，水豆腐）": "low", "内酯豆腐（盒装嫩豆腐）": "low", "豆腐干（白干，散装）": "low", "香干（卤制豆干）": "low", "千张（百页，薄豆皮）": "low", "豆皮（干豆腐皮）": "low", "豆腐丝（干，袋装）": "low", "腐竹（干，袋装）": "low", "素鸡（豆制卷）": "low", "油豆腐（油炸豆泡）": "low", "豆腐泡（鲜豆泡）": "low", "豆腐乳（红方，瓶装）": "low", "豆浆（无糖，现磨）": "medium", "豆奶（豆乳，含糖）": "low", "鹰嘴豆（干）": "high", "豌豆（鲜，带荚）": "medium", "小麦粉（标准粉，干重）": "high", "全麦粉（干重）": "medium", "大米（生）": "high", "籼米（标准，干重）": "medium", "粳米（标一，干重）": "medium", "糯米（江米，干重）": "low", "糙米（生，干重）": "medium", "黑米（生，干重）": "low", "玉米面（黄，干重）": "high", "玉米（黄，干）": "high", "高粱米（干重）": "medium", "荞麦（干重）": "medium", "燕麦片（纯，干）": "high", "馒头（标准粉）": "medium", "挂面（鸡蛋面干）": "medium", "干挂面": "medium", "意大利面（干）": "medium", "全麦面包（熟重）": "medium", "白面包（均值，熟重）": "medium", "方便面（油炸，含调料）": "low", "米粉（干，细）": "medium", "土豆（生）": "low", "花生仁（生，去壳）": "medium"}, "ranges": {"鸡蛋（红皮，全蛋）": [1.01, 1.22], "鸡蛋（土鸡蛋，全蛋）": [1.01, 1.22], "蛋清（鸡蛋清）": [1.0, 1.15], "纯牛奶（全脂）": [1.14, 1.44], "牛奶（脱脂）": [1.14, 1.44], "奶粉（全脂）": [1.18, 1.44], "酸奶（普通含糖）": [1.14, 1.4], "希腊酸奶（过滤型）": [1.14, 1.4], "奶酪（切达）": [1.0, 1.15], "乳清蛋白粉（浓缩 WPC80）": [1.14, 1.33], "乳清蛋白粉（分离 WPI90）": [1.14, 1.25], "酪蛋白（缓释）": [1.0, 1.18], "大豆分离蛋白粉": [0.82, 0.98], "黄豆（干）": [0.85, 1.05], "黑豆（干）": [0.85, 1.05], "青豆（干，青大豆）": [0.85, 1.05], "红豆（赤小豆，干）": [0.74, 0.82], "北豆腐（卤水，老豆腐）": [0.64, 0.95], "南豆腐（石膏，水豆腐）": [0.64, 0.95], "内酯豆腐（盒装嫩豆腐）": [0.6, 0.92], "豆腐干（白干，散装）": [0.78, 0.9], "香干（卤制豆干）": [0.78, 0.9], "千张（百页，薄豆皮）": [0.8, 0.95], "豆皮（干豆腐皮）": [0.8, 0.95], "豆腐丝（干，袋装）": [0.8, 0.95], "腐竹（干，袋装）": [0.8, 0.95], "素鸡（豆制卷）": [0.78, 0.9], "油豆腐（油炸豆泡）": [0.75, 0.9], "豆腐泡（鲜豆泡）": [0.75, 0.9], "豆腐乳（红方，瓶装）": [0.8, 0.92], "豆浆（无糖，现磨）": [0.85, 0.91], "豆奶（豆乳，含糖）": [0.8, 0.91], "鹰嘴豆（干）": [0.66, 0.78], "豌豆（鲜，带荚）": [0.58, 0.88], "小麦粉（标准粉，干重）": [0.4, 0.48], "全麦粉（干重）": [0.2, 0.48], "大米（生）": [0.47, 0.66], "籼米（标准，干重）": [0.47, 0.66], "粳米（标一，干重）": [0.47, 0.66], "糯米（江米，干重）": [0.47, 0.62], "糙米（生，干重）": [0.42, 0.6], "黑米（生，干重）": [0.42, 0.6], "玉米面（黄，干重）": [0.36, 0.54], "玉米（黄，干）": [0.36, 0.54], "高粱米（干重）": [0.29, 0.35], "荞麦（干重）": [0.47, 0.68], "燕麦片（纯，干）": [0.43, 0.77], "馒头（标准粉）": [0.4, 0.48], "挂面（鸡蛋面干）": [0.4, 0.48], "干挂面": [0.4, 0.48], "意大利面（干）": [0.4, 0.48], "全麦面包（熟重）": [0.35, 0.45], "白面包（均值，熟重）": [0.35, 0.45], "方便面（油炸，含调料）": [0.33, 0.45], "米粉（干，细）": [0.47, 0.66], "土豆（生）": [0.7, 1.0], "花生仁（生，去壳）": [0.43, 0.6]}, "sources": [{"value": 1.13, "food": "鸡蛋", "basis": "pdcaas", "source": "未截断 PDCAAS（经典汇编值；DIAAS 122%，SAA 限制）", "url": "https://www.fao.org/3/i3124e/i3124e.pdf"}, {"value": 1.14, "food": "牛奶", "basis": "pdcaas", "source": "未截断 PDCAAS（经典汇编值；DIAAS 123–144%，SAA 限制）", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 1.14, "food": "乳清蛋白", "basis": "pdcaas", "source": "未截断 PDCAAS（DIAAS WPC 133%、WPI 125%）", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 1.0, "food": "酪蛋白", "basis": "pdcaas", "source": "未截断 PDCAAS（DIAAS 109–118%）", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 0.9, "food": "大豆分离蛋白", "basis": "diaas", "source": "DIAAS 82.4±7.7（全部数据）/ 87.7（非深加工）；猪法 91–98%", "url": "https://doi.org/10.3389/fnut.2022.1004754"}, {"value": 0.85, "food": "黄豆（整粒）", "basis": "diaas", "source": "DIAAS 84.6±9.6；猪法大豆粉 105%、大鼠 91%", "url": "https://doi.org/10.3389/fnut.2022.1004754"}, {"value": 0.75, "food": "豆腐", "basis": "diaas/pdcaas 中位", "source": "DIAAS 63.7±11.7（n=2）与 PDCAAS 78.9±19.0 分歧大，取中位并标 low confidence", "url": "https://doi.org/10.3389/fnut.2022.1004754"}, {"value": 0.88, "food": "豆浆", "basis": "diaas", "source": "豆奶 DIAAS 90.7（n=1，数据少）", "url": "https://doi.org/10.3389/fnut.2022.1004754"}, {"value": 0.71, "food": "鹰嘴豆", "basis": "diaas", "source": "熟鹰嘴豆 DIAAS 71%（缬氨酸限制，SID 83%）", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 0.72, "food": "豌豆", "basis": "diaas", "source": "熟豌豆 DIAAS 88%（猪，成人模式）/ 58%（大鼠，0.5–3 岁模式），取区间中位", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 0.78, "food": "红豆（赤小豆）", "basis": "diaas", "source": "熟赤小豆 DIAAS 78%（SAA 限制，SID 87%）", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 0.44, "food": "小麦/面粉", "basis": "diaas", "source": "小麦 DIAAS 43%（赖氨酸限制，SID 73%）；FAO 示例小麦赖氨酸真回肠消化率 0.82", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 0.6, "food": "大米", "basis": "diaas", "source": "精白米 DIAAS 64%（猪）/ 60%（大鼠）；糙米 42%", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 0.48, "food": "玉米", "basis": "diaas", "source": "黄马齿玉米 DIAAS 48%（赖氨酸限制，SID 75%）；乳猪模式 36%", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 0.3, "food": "高粱", "basis": "diaas", "source": "高粱 DIAAS 29%（赖氨酸限制，SID 69%）", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 0.57, "food": "荞麦", "basis": "diaas", "source": "熟荞麦 68%（SAA 限制）/ 苦荞 47%，取中位", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 0.62, "food": "燕麦", "basis": "diaas", "source": "去壳燕麦 77%、快熟燕麦 67%、熟燕麦片 43–54%，取中位", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 0.4, "food": "面包/面制品", "basis": "diaas", "source": "小麦基质 + 美拉德损失，按小麦 43% 下调", "url": "https://doi.org/10.3390/nu14050947"}, {"value": 0.75, "food": "土豆", "basis": "diaas", "source": "土豆蛋白 DIAAS 100%（无限制氨基酸）；整薯熟制偏低，取保守值", "url": "https://doi.org/10.1002/fsn3.1809"}, {"value": 0.55, "food": "花生", "basis": "diaas", "source": "烤花生 DIAAS 43%（赖氨酸限制，SID 92%）；PDCAAS 52–60%，取 0.55", "url": "https://doi.org/10.3390/nu14050947"}, {"value": null, "food": "方法学", "basis": "diaas", "source": "DIAAS 定义、回肠消化率要求、>100% 不截断", "url": "https://www.fao.org/3/i3124e/i3124e.pdf"}, {"value": null, "food": "方法学", "basis": "diaas", "source": "73 项食物 DIAAS 汇总表（猪/大鼠，成人及 0.5–3 岁模式）", "url": "https://doi.org/10.3390/nu14050947"}, {"value": null, "food": "方法学", "basis": "diaas", "source": "17 种动/植物蛋白 DIAAS（SID 法，0.5–3 岁模式）", "url": "https://doi.org/10.1002/fsn3.1809"}], "caveats": ["动物蛋白的 1.13/1.14/1.00 是 PDCAAS 经典汇编值（业界通用，本任务也以此为锚）；DIAAS 口径下鸡蛋 1.22、牛奶 1.23–1.44、乳清 1.25–1.33、酪蛋白 1.09–1.18，见 ranges。", "豆腐是唯一分歧 >0.15 的条目：DIAAS 0.64 vs PDCAAS 0.79，取 0.75。若站点偏保守可下调到 0.70。", "豆制品组默认 0.90 只适用于浓缩豆制品（腐竹/豆皮/豆干）；嫩豆腐请用 by_name（0.72–0.75）。", "鹰嘴豆、豌豆在 data.json 里被归入「豆制品」，但它们是豆科籽实，按 0.90 会高估 25–30%，已用 by_name 修正。", "谷物 0.55、面制品 0.50、薯类 0.55、坚果 0.65 是组内混合中位；小米、藜麦、芝麻、杏仁等未找到可靠单一值，走组默认。", "DIAAS 数据多来自猪模型（回肠消化率与人类高度相关，FAO 2013 认可），少数为大鼠；meta.sources 已逐条标注物种/模式。"]}};
+/*DIGEST-END*/
+
 const $ = s => document.querySelector(s);
-const costPerGram = d => d.y / (d.p * 5 * d.e);
 const TIER = {t1: 1, t2: 2, all: 3};
-const state = { density: "t2", fam: new Set(), expand: false };
+const TARGET = {kg: 70, perKg: 1.6};
+const targetDaily = () => Math.round(TARGET.kg * TARGET.perKg);
+const readWeight = () => {
+  try {
+    const v = Number(localStorage.getItem("pv.weight"));
+    return Number.isFinite(v) && v >= 30 && v <= 200 ? v : 70;
+  } catch (e) { return 70; }
+};
+TARGET.kg = readWeight();
+const state = { density: "t2", absorb: "none", weight: TARGET.kg, fam: new Set(), expand: false };
 const LIMIT = 26;
+
+const absorbOn = () => state.absorb !== "none";
+const absorbK = d => {
+  if (!absorbOn()) return 1;
+  const byName = (DIGEST.by_name || {})[d.name];
+  if (typeof byName === "number") return byName;
+  const byGroup = (DIGEST.by_group || {})[d.g];
+  return typeof byGroup === "number" ? byGroup : 1;
+};
+const effP = d => d.p * absorbK(d);
+const costPerGram = d => d.y / (d.p * 5 * d.e * absorbK(d));
+const fmtP = d => absorbOn() ? effP(d).toFixed(1) : String(d.p);
+const dayGrams = d => targetDaily() / (effP(d) * d.e / 100);
+const dayCost = d => dayGrams(d) * d.y / 500;
+const fmtDayGrams = d => {
+  const g = dayGrams(d);
+  return (g > 999 ? Math.round(g / 10) * 10 : Math.round(g)).toLocaleString("zh-CN");
+};
+const fmtDayCost = d => {
+  const c = dayCost(d);
+  return c < 1 ? c.toFixed(2) : c.toFixed(1);
+};
 
 function visible(){
   let rows = DATA.filter(d => d.p > 0 && d.y > 0);
@@ -407,6 +522,13 @@ function renderControls(){
     b.setAttribute("aria-pressed", String(b.dataset.d === state.density));
     b.onclick = () => { state.density = b.dataset.d; state.expand = false; render(); };
   });
+
+  $("#absorb").querySelectorAll("button").forEach(b => {
+    b.setAttribute("aria-pressed", String(b.dataset.a === state.absorb));
+    b.onclick = () => { state.absorb = b.dataset.a; state.expand = false; render(); };
+  });
+
+  renderAbsorbUI();
 
   const rows = visible();
   const missing = DATA.length - DATA.filter(d => d.p > 0 && d.y > 0).length;
@@ -441,13 +563,13 @@ function renderRanking(rows){
   const l0 = Math.log10(0.03), l1 = Math.log10(5.0);
   const xf = v => M.l + plotW * (Math.log10(Math.min(Math.max(v, 0.03), 5.0)) - l0) / (l1 - l0);
 
-  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="每克蛋白质价格排名">`;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${absorbOn() ? "每克可吸收蛋白价格排名" : "每克蛋白质价格排名"}">`;
   [0.05, 0.1, 0.3, 1, 3].forEach(v => {
     const x = xf(v);
     s += `<line class="grid-line" x1="${x}" y1="${M.t}" x2="${x}" y2="${M.t + bodyH}" stroke-dasharray="2 4"/>`;
     s += `<text class="axis" x="${x}" y="${M.t + bodyH + 26}" text-anchor="middle">${v}</text>`;
   });
-  s += `<text class="axis" x="${M.l + plotW/2}" y="${M.t + bodyH + 44}" text-anchor="middle">元 / 克蛋白质（对数刻度）</text>`;
+  s += `<text class="axis" x="${M.l + plotW/2}" y="${M.t + bodyH + 44}" text-anchor="middle">${absorbOn() ? "元 / 克可吸收蛋白" : "元 / 克蛋白质"}（对数刻度）</text>`;
 
   let y = M.t;
   items.forEach(it => {
@@ -470,6 +592,9 @@ function renderRanking(rows){
     ? `<button class="more" id="more">展开全部 ${total} 种</button>` : "");
   const mb = $("#more");
   if (mb) mb.onclick = () => { state.expand = true; render(); };
+  const rt = $("#rank-title");
+  if (rt) rt.textContent = absorbOn() ? "每克可吸收蛋白价格（元）" : "每克蛋白质价格（元）";
+  renderRankNote(rows);
 }
 
 
@@ -486,7 +611,7 @@ function renderScatter(rows){
   const pts = rows.map(d => {
     const c = costPerGram(d);
     const r = Math.max(3.2, Math.min(8, Math.sqrt(c) * 6));
-    return {...d, cost: c, cx: lx(d.p), cy: ly(d.y), r, label: d.name.replace(/（.*?）/g,'')};
+    return {...d, cost: c, cx: lx(effP(d)), cy: ly(d.y), r, label: d.name.replace(/（.*?）/g,'')};
   });
 
   // 标签优先级：先按分层 t 升序（t=1 最优先），同层按成本从低到高；最多 34 个占位
@@ -534,7 +659,7 @@ function renderScatter(rows){
     s += `<line class="grid-line" x1="${x}" y1="${M.t}" x2="${x}" y2="${M.t+plotH}" stroke-dasharray="2 4"/>`;
     s += `<text class="axis" x="${x}" y="${M.t+plotH+20}" text-anchor="middle">${v}</text>`;
   });
-  s += `<text class="axis" x="${M.l+plotW/2}" y="${H-9}" text-anchor="middle">蛋白质（克 / 100 克食物，对数）</text>`;
+  s += `<text class="axis" x="${M.l+plotW/2}" y="${H-9}" text-anchor="middle">${absorbOn() ? "可吸收蛋白" : "蛋白质"}（克 / 100 克食物，对数）</text>`;
   s += `<text class="axis" transform="translate(18,${M.t+plotH/2}) rotate(-90)" text-anchor="middle">价格（元 / 斤，对数）</text>`;
   // 等高线渐变背景：等成本线 = y(元/斤) = 5 × 成本 × 蛋白量
   const hex2rgb = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
@@ -598,7 +723,7 @@ function renderScatter(rows){
   });
   pts.forEach(d => {
     s += `<circle cx="${d.cx}" cy="${d.cy}" r="${d.r}" fill="${FAM_COLOR[famOf(d.g)]}" opacity=".8">`
-       + `<title>${d.name} · ${d.p}g/100g · ${d.y}元/斤 · ${costPerGram(d).toFixed(3)} 元/g</title></circle>`;
+       + `<title>${d.name} · ${fmtP(d)}g/100g · ${d.y}元/斤 · ${costPerGram(d).toFixed(3)} 元/g</title></circle>`;
   });
   pts.forEach(d => {
     if (d.hideLabel) return;
@@ -610,26 +735,159 @@ function renderScatter(rows){
 
 /* ---------- 表格 ---------- */
 function renderTable(rows){
+  const gym = state.absorb === "gym";
+  const tbl = $("#tbl");
+  const scroll = tbl && tbl.closest(".scroll");
+  if (scroll) scroll.classList.toggle("gym", gym);
+  const head = $("#tbl-head");
+  if (head) head.innerHTML = `<tr><th>食物</th><th>类别</th><th class="num">${absorbOn() ? "可吸收蛋白" : "蛋白"} g/100g</th><th class="num">食部</th><th class="num">元/斤</th><th class="num">元/克${absorbOn() ? "可吸收蛋白" : "蛋白"}</th>${gym ? `<th class="num">每天要吃多少克（${TARGET.kg} kg）</th><th class="num">每天要花多少钱（${TARGET.kg} kg）</th>` : ""}<th>口径与规格</th></tr>`;
+  const cap = $("#tbl-caption");
+  if (cap) cap.textContent = "价格为中国大陆商超/菜场常见零售价（元/斤，2026-11）；蛋白质为每 100 克可食部"
+    + (absorbOn() ? "（已按 DIAAS 折算为可吸收蛋白）" : "")
+    + (gym ? `；每日列按 ${TARGET.kg} kg × ${TARGET.perKg} g/kg = ${targetDaily()} g 可吸收蛋白/天折算` : "");
   const list = [...rows].sort((a,b) => costPerGram(a) - costPerGram(b));
   $("#tbl tbody").innerHTML = list.map(d => `<tr>
       <td><span class="cat-dot" style="background:${FAM_COLOR[famOf(d.g)]}"></span>${d.name}${(d.t || 2) === 3 ? '<span class="tag-k">少见</span>' : ""}</td>
       <td style="color:var(--muted);font-size:13px">${d.g}</td>
-      <td class="num">${d.p}</td>
+      <td class="num">${fmtP(d)}</td>
       <td class="num" style="color:${d.e < 1 ? "var(--claret)" : "var(--muted)"}">${d.e < 1 ? (d.e*100).toFixed(0)+"%" : "100%"}</td>
       <td class="num">${d.y}</td>
       <td class="num"><b>${costPerGram(d).toFixed(3)}</b></td>
+      ${gym ? `<td class="num">${fmtDayGrams(d)}</td><td class="num">${fmtDayCost(d)}</td>` : ""}
       <td style="font-size:13px;color:var(--muted)">${d.note}</td>
     </tr>`).join("");
+}
+
+/* ---------- 顶部统计 / 模式提示 ---------- */
+const statName = d => d.name.replace(/（.*?）/g, "").replace(/\(.*?\)/g, "").replace(/^扇贝$/, "活扇贝");
+const RANK_NOTE_NONE = $("#rank-note") ? $("#rank-note").textContent : "";
+const HERO_LEDE_NONE = $("#hero-lede") ? $("#hero-lede").innerHTML : "";
+const COPY_NONE = {
+  rankH2: $("#rank-h2") ? $("#rank-h2").textContent : "",
+  rankLede: $("#rank-lede") ? $("#rank-lede").textContent : "",
+  fitnessLede: $("#fitness-lede") ? $("#fitness-lede").textContent : "",
+  methodSummary: $("#method-summary") ? $("#method-summary").innerHTML : ""
+};
+
+/* 章节标题/导语随模式改口径，none 一字不动 */
+function renderCopy(){
+  const on = absorbOn();
+  const h = $("#rank-h2"), l = $("#rank-lede"), f = $("#fitness-lede");
+  if (h) h.textContent = on ? "每克可吸收蛋白要花多少钱" : COPY_NONE.rankH2;
+  if (l) l.textContent = on ? "把「每斤多少钱」除以「每斤含多少克可吸收蛋白」，就是每克可吸收蛋白的真实成本。数字越小越划算，它天然抹平了「一斤多少钱」的直觉误导。" : COPY_NONE.rankLede;
+  if (f) f.textContent = on ? "把「每克可吸收蛋白多少钱」再往前推一步：按体重和目标蛋白量，折算成每天要买多少、花多少钱。" : COPY_NONE.fitnessLede;
+  const m = $("#method-summary");
+  if (m) m.innerHTML = on ? COPY_NONE.methodSummary.replace("每克蛋白质", "每克可吸收蛋白") : COPY_NONE.methodSummary;
+}
+
+/* 首段导语随模式改口径：none 保持原文，daily/gym 换可吸收蛋白与对应数字 */
+function renderHeroLede(){
+  const el = $("#hero-lede");
+  if (!el) return;
+  if (!absorbOn()){ el.innerHTML = HERO_LEDE_NONE; return; }
+  const soy = DATA.find(d => d.name === "黄豆（干）");
+  const scallop = DATA.find(d => d.name === "扇贝（带壳活）");
+  if (!soy || !scallop){ el.innerHTML = HERO_LEDE_NONE; return; }
+  const money = v => v >= 1 ? v.toFixed(2) : v.toFixed(3);
+  const soyG = Math.round(soy.p * 5 * absorbK(soy));
+  const scaG = Math.round(scallop.p * 5 * scallop.e * absorbK(scallop));
+  const cSoy = costPerGram(soy), cSca = costPerGram(scallop);
+  const ratio = Math.round(Number(cSca.toFixed(2)) / Number(cSoy.toFixed(3)));
+  el.innerHTML = `一斤黄豆 ${soy.y} 元，含 ${soyG} 克可吸收蛋白，折下来每克可吸收蛋白 ${money(cSoy)} 元。同样一斤活扇贝 ${scallop.y} 元，剥出来的可食部分只含 ${scaG} 克可吸收蛋白，每克 ${money(cSca)} 元——为了同样的可吸收蛋白，要多付 ${ratio} 倍的钱。蛋白质含量和价格并不是一回事，下面把它们放在同一把尺子上量：算的都是真正吃到嘴里的那部分，带壳、带骨、带荚的先折可食部。`;
+}
+
+function renderHero(){
+  const priced = DATA.filter(d => d.p > 0 && d.y > 0);
+  const byCost = [...priced].sort((a,b) => costPerGram(a) - costPerGram(b));
+  const lo = byCost[0], hi = byCost[byCost.length - 1];
+  const score = v => v >= 1 ? Number(v.toFixed(2)) : Number(v.toFixed(3));
+  const ratio = Math.round(score(costPerGram(hi)) / score(costPerGram(lo)));
+  const peak = [...DATA].filter(d => d.p > 0).sort((a,b) => effP(b) - effP(a))[0];
+  const unit = absorbOn() ? "可吸收蛋白" : "蛋白质";
+  const money = v => v >= 1 ? v.toFixed(2) : v.toFixed(3);
+  const set = (i, n, l) => { const el = $("#stat-" + i); if (el) el.innerHTML = `<div class="n">${n}</div><div class="l">${l}</div>`; };
+  set(1, `${money(costPerGram(lo))}<small> 元</small>`, `${statName(lo)}每克${unit}，全表最低`);
+  set(2, `${money(costPerGram(hi))}<small> 元</small>`, `${statName(hi)}每克${unit}，全表最高`);
+  set(3, `${ratio}<small>×</small>`, `两者差了 ${ratio} 倍`);
+  const rr = $("#rank-ratio");
+  if (rr) rr.textContent = ratio;
+  set(4, `${Number(effP(peak).toFixed(1))}<small> g</small>`, `${statName(peak)}每 100 克含${unit}，全表最高`);
+}
+
+function renderAbsorbUI(){
+  const on = absorbOn();
+  const gymMode = state.absorb === "gym";
+  const bar = document.querySelector(".filterbar");
+  if (bar) bar.classList.toggle("gym", gymMode);
+  renderHeroLede();
+  renderCopy();
+  const note = $("#absorb-note");
+  if (note){
+    note.hidden = !on;
+    if (on) note.innerHTML = "已按 DIAAS 消化率折算，即真正进入血液的必需氨基酸比例。表中「蛋白」均指可吸收蛋白，成本 = 价格 ÷（蛋白含量 × 5 × 食部 × 吸收系数）。"
+      + (gymMode ? ` 健身模式按 ${TARGET.kg} kg、1.6 g 蛋白/kg 体重/天（增肌期推荐量）计算，每天目标 ${targetDaily()} g 可吸收蛋白；按每周 3–4 练估算，可自行换算。` : "");
+  }
+  const hint = $("#gym-hint");
+  if (hint){
+    hint.hidden = !gymMode;
+    if (gymMode) hint.innerHTML = `健身模式 · ${TARGET.kg} kg × ${TARGET.perKg} g/kg = <b>${targetDaily()} g</b> 可吸收蛋白/天（增肌期推荐量）· <a href="#fitness">去 06 · 健身看怎么吃 ↓</a>`;
+  }
+  const wt = $("#wt-wrap");
+  if (wt) wt.hidden = !gymMode;
+  const wi = $("#weight");
+  if (wi && document.activeElement !== wi) wi.value = TARGET.kg;
+  const rt = $("#rank-title");
+  if (rt) rt.textContent = on ? "每克可吸收蛋白价格（元）" : "每克蛋白质价格（元）";
+}
+
+/* 体重输入：仅健身模式显示；input 实时重算，空值留到 blur 回退 70 */
+function bindWeight(){
+  const wi = $("#weight");
+  if (!wi) return;
+  wi.value = TARGET.kg;
+  const apply = v => {
+    TARGET.kg = v;
+    state.weight = v;
+    try { localStorage.setItem("pv.weight", String(v)); } catch (e) { /* 隐私模式等，忽略 */ }
+    render();
+  };
+  wi.addEventListener("input", e => {
+    if (e.target.value === "") return;               // 正在清空，先不回写
+    const v = Number(e.target.value);
+    if (!Number.isFinite(v) || v < 30 || v > 200) return;
+    apply(v);
+  });
+  wi.addEventListener("blur", e => {
+    let v = Number(e.target.value);
+    if (e.target.value === "" || !Number.isFinite(v) || v < 30 || v > 200) v = 70;
+    if (e.target.value !== String(v)) e.target.value = v;
+    apply(v);
+  });
+}
+
+function renderRankNote(rows){
+  const el = $("#rank-note");
+  if (!el) return;
+  if (!absorbOn()){ el.textContent = RANK_NOTE_NONE; return; }
+  const all = rows.map(d => ({...d, val: costPerGram(d)})).sort((a,b) => a.val - b.val);
+  const top = all.slice(0, 5).map(d => `${statName(d)} ${d.val.toFixed(3)}`).join("、");
+  let s = `按可吸收蛋白重算，最划算的五种：${top} 元/克。`;
+  const egg = all.find(d => d.name.indexOf("鸡蛋") === 0);
+  const noodle = all.find(d => d.name === "干挂面");
+  if (egg && noodle) s += ` 鸡蛋 ${egg.val.toFixed(3)}、干挂面 ${noodle.val.toFixed(3)}，相差 ${(noodle.val / egg.val).toFixed(1)} 倍——氨基酸构成不同，鸡蛋的蛋白质更「值钱」。`;
+  el.textContent = s;
 }
 
 function render(){
   const rows = visible();
   renderControls();
+  renderHero();
   renderRanking(rows);
   renderScatter(rows);
   renderTable(rows);
 }
 
+bindWeight();
 render();
 
 </script>
